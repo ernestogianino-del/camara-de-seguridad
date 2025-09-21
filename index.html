@@ -449,7 +449,7 @@
 
   <!-- Carrito Drawer -->
   <div class="fixed inset-0 z-50 pointer-events-none" aria-hidden="true">
-    <div class="absolute inset-0 bg-black/40 opacity-0 transition-opacity duration-300 pointer-events-auto" onclick="window.closeCart()" id="cart-backdrop"></div>
+    <div class="absolute inset-0 bg-black/40 opacity-0 transition-opacity duration-300 pointer-events-none" onclick="window.closeCart()" id="cart-backdrop"></div>
     <aside class="absolute right-0 top-0 h-full w-full max-w-md bg-white shadow-2xl translate-x-full transition-transform duration-300 pointer-events-auto" id="cart-panel">
       <div class="p-4 border-b flex items-center justify-between">
         <h3 class="text-lg font-semibold">Tu carrito</h3>
@@ -496,13 +496,15 @@
     (function(){
       const panel = document.getElementById('cart-panel');
       const bd = document.getElementById('cart-backdrop');
-      const ro = new MutationObserver(()=>{
+      function updateDrawerUI(){
         const open = document.documentElement.classList.contains('cart-open');
         panel.style.transform = open ? 'translateX(0)' : 'translateX(100%)';
         bd.style.opacity = open ? '1' : '0';
         bd.style.pointerEvents = open ? 'auto' : 'none';
-      });
-      ro.observe(document.documentElement,{ attributes:true });
+      }
+      updateDrawerUI();
+      const ro = new MutationObserver(updateDrawerUI);
+      ro.observe(document.documentElement,{ attributes:true, attributeFilter:['class'] });
       const y = document.getElementById('y'); if(y) y.textContent = new Date().getFullYear();
 
       // Guardas por si el bundler o un error previo borró las globales
