@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Tienda de Cámaras de Seguridad | Protección 24/7</title>
-  <meta name="description" content="Compra cámaras Wi-Fi, kits DVR y timbres inteligentes. Envíos en Lima y todo el Perú. Paga por Yape/Plin o coordina por WhatsApp." />
+  <meta name="description" content="Compra cámaras Wi‑Fi, kits DVR y timbres inteligentes. Envíos en Lima y todo el Perú. Paga por Yape/Plin o coordina por WhatsApp." />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -33,7 +33,7 @@
     const PRODUCTS = [
       {
         id: 'cam-mini-360',
-        title: 'Cámara Wi-Fi 360° Mini',
+        title: 'Cámara Wi‑Fi 360° Mini',
         price: 159,
         compareAt: 199,
         badge: 'Más vendida',
@@ -74,6 +74,10 @@
     const qs = (s, el=document) => el.querySelector(s);
 
     // ===== Carrito (localStorage) =====
+    // Aseguramos definición global de openCart/closeCart para eventos inline
+    window.openCart = function(){ document.documentElement.classList.add('cart-open'); };
+    window.closeCart = function(){ document.documentElement.classList.remove('cart-open'); };
+
     const Cart = {
       key: 'seguricam_cart_v1',
       get(){ try { return JSON.parse(localStorage.getItem(this.key)) || []; } catch { return []; } },
@@ -94,9 +98,6 @@
       return { items, subtotal, igv, delivery, total };
     }
 
-    function openCart(){ document.documentElement.classList.add('cart-open'); }
-    function closeCart(){ document.documentElement.classList.remove('cart-open'); }
-
     function openProduct(id){
       const p = PRODUCTS.find(x=>x.id===id); if(!p) return;
       const m = qs('#product-modal');
@@ -107,7 +108,7 @@
       qs('[data-p-compare]', m).textContent = p.compareAt ? PEN.format(p.compareAt) : '';
       qs('[data-p-short]', m).textContent = p.short;
       qs('[data-p-details]', m).textContent = p.details;
-      qs('#btnAddDetail').onclick = ()=>{ Cart.add(p.id); openCart(); };
+      qs('#btnAddDetail').onclick = ()=>{ Cart.add(p.id); window.openCart(); };
       m.showModal();
     }
 
@@ -130,7 +131,7 @@
               '</div>' +
             '</button>' +
             '<div class="p-4 pt-0">' +
-              '<button onclick="Cart.add(\''+p.id+'\'); openCart();" class="w-full inline-flex items-center justify-center gap-2 rounded-xl bg-[var(--brand)] hover:bg-[var(--brandDark)] text-white py-2.5 font-semibold">Añadir al carrito</button>' +
+              '<button onclick="Cart.add(\''+p.id+'\'); window.openCart();" class="w-full inline-flex items-center justify-center gap-2 rounded-xl bg-[var(--brand)] hover:bg-[var(--brandDark)] text-white py-2.5 font-semibold">Añadir al carrito</button>' +
             '</div>' +
           '</article>'
         );
@@ -231,48 +232,34 @@
       var s = document.getElementById('search'); if(s) s.addEventListener('input', applySearchSort);
       var so = document.getElementById('sort'); if(so) so.addEventListener('change', applySearchSort);
 
-      // Botón flotante con promo pre-cargada
+      // Href del botón flotante con promo pre-cargada
       var float = document.getElementById('floatWA');
       if(float){
         var promoText = (BUSINESS.promoTitle? BUSINESS.promoTitle+': ' : '') + (BUSINESS.promoMessage || '');
         float.href = 'https://wa.me/' + BUSINESS.phone.replace(/[^0-9]/g,'') + '?text=' + encodeURIComponent(promoText);
       }
 
-      if(window.TEST_MODE === true){ runTests(); }
-    });
-      renderCart();
-      const s = qs('#search'); if(s) s.addEventListener('input', applySearchSort);
-      const so = qs('#sort'); if(so) so.addEventListener('change', applySearchSort);
+      // Cerrar con ESC
+      document.addEventListener('keydown', function(e){ if(e.key==='Escape') window.closeCart(); });
 
-      // Botón flotante con promo pre-cargada
-      const float = qs('#floatWA');
-      if(float){
-        const promoText = (BUSINESS.promoTitle? BUSINESS.promoTitle+': ' : '') + (BUSINESS.promoMessage || '');
-        float.href = 'https://wa.me/' + BUSINESS.phone.replace(/[^0-9]/g,'') + '?text=' + encodeURIComponent(promoText);
-      }
-
-      // Tests (consola)
       if(window.TEST_MODE === true){ runTests(); }
     });
 
-    // ===== Tests (opcionales; no afectan producción) =====
-    window.TEST_MODE = false; // pon true para ejecutar pruebas en consola
+    // ===== Tests =====
+    window.TEST_MODE = false; // true para probar en consola
     function runTests(){
       console.group('Pruebas SeguriCam');
       Cart.clear();
       let t1 = buildWhatsAppText();
       console.assert(typeof t1 === 'string' && t1.length>0, 'buildWhatsAppText retorna string');
       console.assert(t1.includes('Promo') || t1.toLowerCase().includes('promo'), 'Incluye texto de promo');
-
       Cart.add('cam-mini-360');
       let t2 = buildWhatsAppText();
-      console.assert(t2.includes('Pedido:'), 'Incluye encabezado Pedido cuando hay ítems');
-      console.assert(t2.includes('Cámara Wi-Fi 360° Mini'), 'Incluye nombre del producto');
-
+      console.assert(t2.includes('Pedido:'), 'Incluye encabezado Pedido');
+      console.assert(t2.includes('Cámara Wi‑Fi 360° Mini'), 'Incluye nombre del producto');
       Cart.update('cam-mini-360', 2);
       let t3 = buildWhatsAppText();
-      console.assert(t3.includes('x2'), 'Refleja cantidad 2 en mensaje');
-
+      console.assert(t3.includes('x2'), 'Refleja cantidad 2');
       Cart.clear();
       console.groupEnd();
     }
@@ -311,7 +298,7 @@
           <option value="price-desc">Precio: mayor a menor</option>
           <option value="rating">Mejor calificación</option>
         </select>
-        <button onclick="openCart()" class="relative inline-flex items-center gap-2 ml-2 rounded-xl border px-3 py-2 hover:bg-gray-100">
+        <button onclick="window.openCart()" class="relative inline-flex items-center gap-2 ml-2 rounded-xl border px-3 py-2 hover:bg-gray-100">
           🛒 <span class="hidden sm:inline">Carrito</span>
         </button>
       </div>
@@ -323,7 +310,7 @@
     <div class="max-w-6xl mx-auto px-4 py-14 grid md:grid-cols-2 gap-10 items-center">
       <div>
         <h1 class="text-4xl md:text-5xl font-extrabold leading-tight">Protege tu hogar y negocio <span class="text-[var(--brand)]">24/7</span></h1>
-        <p class="mt-4 text-gray-700 text-lg">Cámaras Wi-Fi, kits DVR y timbres inteligentes con instalación guiada y soporte. Facturamos con IGV.</p>
+        <p class="mt-4 text-gray-700 text-lg">Cámaras Wi‑Fi, kits DVR y timbres inteligentes con instalación guiada y soporte. Facturamos con IGV.</p>
         <div class="mt-6 flex flex-wrap gap-3">
           <a href="#catalogSec" class="inline-flex items-center justify-center rounded-2xl bg-[var(--brand)] hover:bg-[var(--brandDark)] text-white px-5 py-3 font-semibold">Ver catálogo</a>
           <button onclick="checkoutWhatsApp()" class="inline-flex items-center justify-center rounded-2xl border border-[var(--brand)] text-[var(--brand)] hover:bg-teal-50 px-5 py-3 font-semibold">Cotizar por WhatsApp</button>
@@ -382,7 +369,7 @@
       </details>
       <details class="p-5 bg-white rounded-2xl border">
         <summary class="font-semibold cursor-pointer">¿Necesito internet?</summary>
-        <p class="mt-3 text-sm text-gray-700">Las cámaras Wi-Fi requieren red 2.4 GHz. Los kits DVR pueden verse por internet si conectas el DVR al router.</p>
+        <p class="mt-3 text-sm text-gray-700">Las cámaras Wi‑Fi requieren red 2.4 GHz. Los kits DVR pueden verse por internet si conectas el DVR al router.</p>
       </details>
       <details class="p-5 bg-white rounded-2xl border">
         <summary class="font-semibold cursor-pointer">¿Métodos de pago?</summary>
@@ -462,11 +449,11 @@
 
   <!-- Carrito Drawer -->
   <div class="fixed inset-0 z-50 pointer-events-none" aria-hidden="true">
-    <div class="absolute inset-0 bg-black/40 opacity-0 transition-opacity duration-300 pointer-events-auto" onclick="closeCart()" id="cart-backdrop"></div>
+    <div class="absolute inset-0 bg-black/40 opacity-0 transition-opacity duration-300 pointer-events-auto" onclick="window.closeCart()" id="cart-backdrop"></div>
     <aside class="absolute right-0 top-0 h-full w-full max-w-md bg-white shadow-2xl translate-x-full transition-transform duration-300 pointer-events-auto" id="cart-panel">
       <div class="p-4 border-b flex items-center justify-between">
         <h3 class="text-lg font-semibold">Tu carrito</h3>
-        <button onclick="closeCart()" class="text-gray-500 hover:text-black">✕</button>
+        <button onclick="window.closeCart()" class="text-gray-500 hover:text-black">✕</button>
       </div>
       <div id="cart-list" class="p-4 overflow-y-auto max-h-[60vh]"></div>
       <div class="p-4 border-t space-y-2">
@@ -517,19 +504,24 @@
       });
       ro.observe(document.documentElement,{ attributes:true });
       const y = document.getElementById('y'); if(y) y.textContent = new Date().getFullYear();
+
+      // Guardas por si el bundler o un error previo borró las globales
+      if(typeof window.openCart !== 'function') window.openCart = function(){ document.documentElement.classList.add('cart-open'); };
+      if(typeof window.closeCart !== 'function') window.closeCart = function(){ document.documentElement.classList.remove('cart-open'); };
     })();
-  </script>
-  <!-- Simple error overlay (debug) -->
-  <div id="errOverlay" style="position:fixed;left:0;right:0;bottom:0;background:#fee2e2;color:#991b1b;padding:8px 12px;font:12px/1.4 system-ui, -apple-system, Segoe UI, Roboto, Helvetica;display:none;z-index:9999"></div>
-  <script>
-    // Muestra errores JS en pantalla para facilitar debugging en VSCode
-    window.addEventListener('error', function(e){
-      var box = document.getElementById('errOverlay');
-      if(!box) return;
-      box.style.display='block';
-      box.textContent = 'Error: ' + (e.message || 'unknown') + (e.filename? ' — ' + e.filename : '') + (e.lineno? ' @'+e.lineno+':'+e.colno : '');
-      console.error(e.error || e.message);
-    });
+
+    // Overlay de errores visible en producción (debug rápido)
+    (function(){
+      const el = document.createElement('div');
+      el.id = 'errOverlay';
+      el.style.cssText = 'position:fixed;left:0;right:0;bottom:0;background:#fee2e2;color:#991b1b;padding:8px 12px;font:12px/1.4 system-ui,-apple-system,Segoe UI,Roboto,Helvetica;display:none;z-index:9999';
+      document.body.appendChild(el);
+      window.addEventListener('error', function(e){
+        el.style.display='block';
+        el.textContent = 'Error: ' + (e.message || 'unknown') + (e.filename? ' — ' + e.filename : '') + (e.lineno? ' @'+e.lineno+':'+e.colno : '');
+        console.error(e.error || e.message);
+      });
+    })();
   </script>
 </body>
 </html>
