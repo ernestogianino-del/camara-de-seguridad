@@ -3,275 +3,80 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <title>web - prueba 2 · Nueva propuesta | Cámaras de seguridad en Lima</title>
-  <meta name="description" content="Nueva propuesta visual: tienda de cámaras de seguridad en Lima. Checkout por WhatsApp, carrito en hoja inferior, mobile-first." />
+  <title>web - prueba 2 · Elegante & Tecnológico | Cámaras de seguridad en Lima</title>
+  <meta name="description" content="E‑commerce elegante y tecnológico para cámaras de seguridad en Lima. Carrito en hoja inferior, checkout por WhatsApp, filtros, cupones y reseñas." />
+  <meta property="og:title" content="Cámaras de seguridad en Lima · web - prueba 2" />
+  <meta property="og:description" content="Compra cámaras Wi‑Fi, kits DVR y timbres inteligentes. Entrega en 24h en Lima. Soporte por WhatsApp." />
+  <meta property="og:type" content="website" />
+  <meta property="og:image" content="https://images.unsplash.com/photo-1585218332977-fd65fdbfb4b4?q=80&w=1200&auto=format&fit=crop" />
+  <meta name="theme-color" content="#00E5FF" />
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     :root{
-      --bg:#0b1220;   /* navy profundo */
-      --bg2:#0f172a;  /* slate-900 */
-      --card:#101826; /* carta oscura */
-      --stroke:rgba(255,255,255,.08);
-      --text:#E5E7EB; /* slate-200 */
-      --muted:#9CA3AF;/* slate-400 */
-      --accent:#00E59A; /* verde neón */
-      --accent2:#60A5FA;/* azul brillo */
-      --accent-dark:#00b67a;
+      --bg1:#070a1a; --bg2:#0b1026; --grid:#1a2238; --text:#E5E7EB; --muted:#94A3B8; --stroke:rgba(255,255,255,.08);
+      --accent:#00E5FF; --accent2:#8B5CF6; --accent3:#22D3EE; --ok:#00ffa3; --danger:#ff5a5f;
     }
     html{ scroll-behavior:smooth }
-    body{ font-family:'Poppins',system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial; background:
-      radial-gradient(1200px 600px at 80% -10%, rgba(96,165,250,.18), transparent 60%),
-      radial-gradient(1000px 600px at 0% -10%, rgba(0,229,154,.18), transparent 60%),
-      linear-gradient(180deg, var(--bg), var(--bg2));
-      color:var(--text);
+    body{
+      font-family:'Inter',system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial; color:var(--text); background:
+        radial-gradient(1200px 600px at 80% -10%, rgba(139,92,246,.15), transparent 60%),
+        radial-gradient(900px 500px at 0% -10%, rgba(34,211,238,.14), transparent 60%),
+        linear-gradient(180deg, var(--bg1), var(--bg2));
     }
-    .glass{ background:rgba(16,24,38,.7); backdrop-filter: blur(8px); }
-    .btn-pri{ background:linear-gradient(90deg, var(--accent), var(--accent2)); color:#041014; }
-    .btn-pri:hover{ filter:brightness(1.05) } 
-    .btn-sec{ border:1px solid var(--stroke); color:var(--text) }
-    .chip{ border:1px solid var(--stroke); color:var(--muted); }
-    .chip.active{ border-color:var(--accent); color:var(--accent); background:rgba(0,229,154,.08) }
-    .card{ background:var(--card); border:1px solid var(--stroke) }
-    .price{ color:white }
-    .safe-bottom{ padding-bottom: max(14px, env(safe-area-inset-bottom)); }
-    @media (max-width:380px){ #logo { font-size:1rem } }
+    .heading{ font-family:'Sora',system-ui,Segoe UI,Arial }
+    .glass{ background:rgba(12,18,36,.6); backdrop-filter: blur(10px); }
+    .btn-pri{ background:linear-gradient(90deg,var(--accent),var(--accent2)); color:#03131a; box-shadow:0 10px 30px rgba(0,229,255,.18) }
+    .btn-pri:hover{ filter:brightness(1.05) }
+    .btn-sec{ border:1px solid var(--stroke) }
+    .chip{ border:1px solid var(--stroke); color:var(--muted) }
+    .chip.active{ border-color:var(--accent); color:var(--accent); background:rgba(0,229,255,.08) }
+    .card{ background:rgba(13,19,40,.8); border:1px solid var(--stroke) }
+    .neon-border{ position:relative }
+    .neon-border:before{ content:""; position:absolute; inset:-1px; border-radius:inherit;
+      padding:1px; background:linear-gradient(130deg,transparent,rgba(0,229,255,.7),rgba(139,92,246,.7),transparent);
+      -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+      -webkit-mask-composite: xor; mask-composite: exclude; pointer-events:none; opacity:.6 }
+    .gridbg{ position:absolute; inset:0; background:
+      linear-gradient(rgba(255,255,255,.05) 1px, transparent 1px) 0 0/ 32px 32px,
+      linear-gradient(90deg, rgba(255,255,255,.05) 1px, transparent 1px) 0 0/ 32px 32px; mask-image:radial-gradient(ellipse at 50% -10%, black, transparent 60%); }
+    .scanline{ position:absolute; inset:-2px; background:linear-gradient(180deg, transparent, rgba(0,229,255,.2), transparent);
+      opacity:.8; animation:scan 6s linear infinite }
+    @keyframes scan{ 0%{ transform:translateY(-100%) } 100%{ transform:translateY(100%) } }
+    .no-scrollbar::-webkit-scrollbar{display:none} .no-scrollbar{-ms-overflow-style:none;scrollbar-width:none}
+    .countdown{font-variant-numeric:tabular-nums;letter-spacing:.04em}
+    .safe-bottom{ padding-bottom:max(14px, env(safe-area-inset-bottom)) }
+    .reveal{ opacity:0; transform: translateY(14px); transition: opacity .6s ease, transform .6s ease }
+    .reveal.show{ opacity:1; transform:none }
+    @media (max-width:380px){ #logo{ font-size:1rem } }
   </style>
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='14' fill='%2300E59A'/%3E%3Cpath d='M11 17l3 3 7-7' stroke='%23041014' stroke-width='3' fill='none' stroke-linecap='round'/%3E%3C/svg%3E"/>
-
-  <script>
-    // ============ CONFIG ============
-    const BUSINESS = {
-      name: 'web - prueba 2',
-      phone: '+51954118198',
-      igv: 0.18,
-      deliveryFlat: 10,
-      deliveryIncludedPromo: true,
-      promoTitle: 'Promo Lima',
-      promoMessage: 'Delivery GRATIS + 10% OFF con código SEGURI10 (hoy)'
-    };
-
-    const PRODUCTS = [
-      { id:'cam-mini-360', title:'Cámara Wi‑Fi 360° Mini', price:159, compareAt:199, badge:'Más vendida', rating:4.7, stock:42, type:'wifi',
-        short:'Visión 360°, audio 2 vías, detección de movimiento.',
-        details:'Conéctala a 2.4 GHz. Visión nocturna, base magnética, microSD.',
-        image:'https://images.unsplash.com/photo-1582744748899-278fd10b0716?q=80&w=1200&auto=format&fit=crop' },
-      { id:'kit-dvr-4', title:'Kit DVR 4 Cámaras 1080p', price:520, compareAt:599, badge:'Pack ahorro', rating:4.6, stock:12, type:'kit',
-        short:'4 cámaras + DVR 4ch, acceso remoto, listo para instalar.',
-        details:'Incluye cables, fuente y app móvil. Requiere HDD (opcional).',
-        image:'https://images.unsplash.com/photo-1595686823819-3dd8d1f409e2?q=80&w=1200&auto=format&fit=crop' },
-      { id:'timbre-smart', title:'Timbre Inteligente con Cámara', price:159, compareAt:189, badge:'Nuevo', rating:4.5, stock:28, type:'timbre',
-        short:'Notificaciones al móvil, visión nocturna, batería recargable.',
-        details:'Atiende desde cualquier lugar. Detección de movimiento.',
-        image:'https://images.unsplash.com/photo-1518432031352-d6fc5c10da5a?q=80&w=1200&auto=format&fit=crop' },
-      { id:'cam-exterior-bullet', title:'Cámara Exterior Bullet 1080p', price:189, compareAt:229, badge:'Exterior', rating:4.6, stock:17, type:'exterior',
-        short:'IP66, visión nocturna, apta para intemperie.',
-        details:'Cableada/Wi‑Fi según modelo, soporte metálico.',
-        image:'https://images.unsplash.com/photo-1543466835-00a7907e9de1?q=80&w=1200&auto=format&fit=crop' }
-    ];
-
-    // ============ UTIL ============
-    const PEN = new Intl.NumberFormat('es-PE',{ style:'currency', currency:'PEN', maximumFractionDigits:2 });
-    function $(id){ return document.getElementById(id); }
-    function qs(s, el=document){ return el.querySelector(s); }
-
-    // ============ CARRITO ============
-    window.openCart  = function(){ document.documentElement.classList.add('cart-open'); };
-    window.closeCart = function(){ document.documentElement.classList.remove('cart-open'); };
-
-    const Cart = {
-      key:'cart_web_prueba2_new',
-      get(){ try { return JSON.parse(localStorage.getItem(this.key))||[] } catch { return [] } },
-      set(items){ localStorage.setItem(this.key, JSON.stringify(items)); renderCart(); },
-      add(id){ const items=this.get(); const i=items.findIndex(x=>x.id===id); if(i>-1) items[i].qty++; else items.push({id,qty:1}); this.set(items); },
-      remove(id){ this.set(this.get().filter(x=>x.id!==id)); },
-      update(id, qty){ const items=this.get(); const it=items.find(x=>x.id===id); if(!it) return; it.qty=Math.max(1, qty|0); this.set(items); },
-      clear(){ this.set([]); }
-    };
-
-    function calcTotals(){
-      const items = Cart.get();
-      let subtotal=0; items.forEach(({id,qty})=>{ const p=PRODUCTS.find(x=>x.id===id); subtotal += (p?p.price:0)*qty });
-      const igv=+(subtotal*BUSINESS.igv).toFixed(2);
-      const delivery=BUSINESS.deliveryIncludedPromo ? 0 : (items.length? BUSINESS.deliveryFlat:0);
-      const total=subtotal+igv+delivery; return {items,subtotal,igv,delivery,total};
-    }
-
-    // ============ RENDER ============
-    function renderCatalog(list){
-      const L = list||PRODUCTS;
-      const wrap = $('catalog');
-      wrap.innerHTML = L.map(p=>{
-        return (
-          '<article class="card rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition">'+
-            (p.badge? '<div class="absolute m-3 text-xs font-semibold text-black bg-[var(--accent)] px-2 py-1 rounded-full">'+p.badge+'</div>':'' )+
-            '<button type="button" class="block w-full text-left js-open-product" data-id="'+p.id+'">'+
-              '<img loading="lazy" src="'+p.image+'" alt="'+p.title+'" class="h-52 w-full object-cover"/>'+
-              '<div class="p-4">'+
-                '<h3 class="text-lg font-semibold mb-1">'+p.title+'</h3>'+
-                '<p class="text-sm" style="color:var(--muted)">'+p.short+'</p>'+
-                '<div class="mt-3 flex items-center gap-2">'+
-                  '<span class="text-xl font-extrabold price">'+PEN.format(p.price)+'</span>'+
-                  (p.compareAt? '<span class="text-sm line-through" style="color:var(--muted)">'+PEN.format(p.compareAt)+'</span>':'' )+
-                '</div>'+
-                '<div class="mt-2 text-xs" style="color:var(--accent)">★ '+p.rating+' · Stock: '+p.stock+'</div>'+
-              '</div>'+
-            '</button>'+
-            '<div class="p-4 pt-0">'+
-              '<button type="button" class="w-full inline-flex items-center justify-center gap-2 rounded-xl btn-pri py-2.5 font-semibold js-add-cart" data-id="'+p.id+'">➕ Añadir</button>'+
-            '</div>'+
-          '</article>'
-        );
-      }).join('');
-    }
-
-    function renderCart(){
-      const t=calcTotals(); const {items,subtotal,igv,delivery,total}=t; const list=$('cart-list');
-      if(!items.length){ list.innerHTML='<div class="text-center text-slate-400 py-12">Tu carrito está vacío.</div>'; }
-      else{
-        list.innerHTML = items.map(({id,qty})=>{
-          const p=PRODUCTS.find(x=>x.id===id);
-          return (
-            '<div class="flex gap-3 py-3 border-b border-white/10">'+
-              '<img src="'+p.image+'" alt="'+p.title+'" class="w-16 h-16 rounded object-cover"/>'+
-              '<div class="flex-1">'+
-                '<div class="flex justify-between gap-2">'+
-                  '<h4 class="font-semibold">'+p.title+'</h4>'+
-                  '<button type="button" class="text-slate-400 hover:text-red-400" title="Quitar" data-action="rem" data-id="'+p.id+'">✕</button>'+
-                '</div>'+
-                '<div class="text-sm text-slate-400">'+PEN.format(p.price)+' c/u</div>'+
-                '<div class="mt-2 flex items-center gap-2">'+
-                  '<button type="button" class="px-2 py-1 border border-white/10 rounded" data-action="dec" data-id="'+p.id+'">−</button>'+
-                  '<span class="w-8 text-center">'+qty+'</span>'+
-                  '<button type="button" class="px-2 py-1 border border-white/10 rounded" data-action="inc" data-id="'+p.id+'">＋</button>'+
-                '</div>'+
-              '</div>'+
-            '</div>'
-          );
-        }).join('');
-      }
-      qs('[data-subtotal]').textContent=PEN.format(subtotal);
-      qs('[data-igv]').textContent=PEN.format(igv);
-      qs('[data-delivery]').textContent= delivery? PEN.format(delivery) : (BUSINESS.deliveryIncludedPromo? 'Incluido' : PEN.format(0));
-      qs('[data-total]').textContent=PEN.format(total);
-    }
-
-    // ============ FILTROS ============
-    function applyFilters(){
-      const q = ($('search') && $('search').value || '').toLowerCase().trim();
-      const activeChip = qs('.chip.active');
-      const type = activeChip ? activeChip.getAttribute('data-type') : '';
-      let list = PRODUCTS.filter(p=> p.title.toLowerCase().includes(q) || p.short.toLowerCase().includes(q));
-      if(type && type!=='all'){ list = list.filter(p=>p.type===type); }
-      const sortEl = $('sort'); const sort = sortEl? sortEl.value : '';
-      if(sort==='price-asc') list.sort((a,b)=>a.price-b.price);
-      if(sort==='price-desc') list.sort((a,b)=>b.price-a.price);
-      if(sort==='rating') list.sort((a,b)=>b.rating-a.rating);
-      renderCatalog(list);
-    }
-
-    // ============ WHATSAPP ============
-    function buildWhatsAppText(){
-      const t=calcTotals(); const {items,subtotal,igv,delivery,total}=t;
-      const nameEl=$('fName'), distEl=$('fDistrict'), msgEl=$('fMsg');
-      const name=(nameEl&&nameEl.value||'').trim();
-      const district=(distEl&&distEl.value||'').trim();
-      const msg=(msgEl&&msgEl.value||'').trim();
-      const header=(BUSINESS.promoTitle? BUSINESS.promoTitle+'\n':'' ) + (BUSINESS.promoMessage? BUSINESS.promoMessage+'\n\n':'' );
-      let body='';
-      if(items.length){
-        const lines = items.map(({id,qty})=>{ const p=PRODUCTS.find(x=>x.id===id); return '• '+p.title+' x'+qty+' = '+PEN.format(p.price*qty); }).join('\n');
-        body = 'Pedido:\n'+lines+'\n\n'+
-               'Subtotal: '+PEN.format(subtotal)+'\n'+
-               'IGV: '+PEN.format(igv)+'\n'+
-               'Delivery: '+(BUSINESS.deliveryIncludedPromo? 'Incluido' : PEN.format(delivery))+'\n'+
-               'TOTAL: '+PEN.format(total);
-      } else { body='Hola, quiero información sobre las cámaras y la promo de hoy.'; }
-      const footer='\n\nDatos:\nNombre: '+name+'\nDistrito: '+district+'\nMensaje: '+msg;
-      return header+body+footer;
-    }
-    function checkoutWhatsApp(){
-      const url='https://wa.me/'+BUSINESS.phone.replace(/[^0-9]/g,'')+'?text='+encodeURIComponent(buildWhatsAppText());
-      window.open(url,'_blank');
-    }
-
-    // ============ INIT ============
-    document.addEventListener('DOMContentLoaded', function(){
-      renderCatalog(); renderCart();
-
-      // Chips categorías
-      const chipWrap = $('chips');
-      if(chipWrap){ chipWrap.addEventListener('click', function(e){ const c=e.target.closest('.chip'); if(!c) return; qs('.chip.active')?.classList.remove('active'); c.classList.add('active'); applyFilters(); }); }
-
-      // Buscador y sort
-      $('search') && $('search').addEventListener('input', applyFilters);
-      $('sort') && $('sort').addEventListener('change', applyFilters);
-
-      // Delegación Catálogo
-      const cat=$('catalog');
-      if(cat){
-        cat.addEventListener('click', function(e){
-          const openBtn=e.target.closest('.js-open-product');
-          const addBtn=e.target.closest('.js-add-cart');
-          if(openBtn){ openProduct(openBtn.getAttribute('data-id')); }
-          if(addBtn){ Cart.add(addBtn.getAttribute('data-id')); openCart(); }
-        });
-      }
-
-      // Delegación Carrito (sheet)
-      const cartList=$('cart-list');
-      if(cartList){ cartList.addEventListener('click', function(e){ const t=e.target.closest('[data-action]'); if(!t) return; const act=t.getAttribute('data-action'); const id=t.getAttribute('data-id'); if(act==='inc') Cart.add(id); if(act==='dec'){ const items=Cart.get(); const it=items.find(x=>x.id===id); if(it){ it.qty<=1? Cart.remove(id) : Cart.update(id, it.qty-1); } } if(act==='rem') Cart.remove(id); }); }
-
-      // Botones WhatsApp
-      ['btnHeroWA','btnContactWA','btnCheckout','btnCheckoutForm','btnFooterWA','dockWA'].forEach(i=>{ const el=$(i); if(el) el.addEventListener('click', checkoutWhatsApp); });
-
-      // Acciones de Sheet
-      $('btnOpenCart') && $('btnOpenCart').addEventListener('click', openCart);
-      $('btnCloseCart') && $('btnCloseCart').addEventListener('click', closeCart);
-      $('sheet-backdrop') && $('sheet-backdrop').addEventListener('click', closeCart);
-      $('btnClearCart') && $('btnClearCart').addEventListener('click', function(){ Cart.clear(); });
-
-      // Dock móvil
-      $('dockCart') && $('dockCart').addEventListener('click', openCart);
-      $('dockCatalog') && $('dockCatalog').addEventListener('click', function(){ document.getElementById('catalogSec').scrollIntoView({behavior:'smooth'}); });
-
-      // Estado visual del Sheet
-      const sheet=$('cart-sheet'); const bd=$('sheet-backdrop');
-      function updateSheet(){ const open=document.documentElement.classList.contains('cart-open'); sheet.style.transform = open? 'translateY(0)' : 'translateY(100%)'; bd.style.opacity=open? '1':'0'; bd.style.pointerEvents=open? 'auto':'none'; }
-      updateSheet(); new MutationObserver(updateSheet).observe(document.documentElement,{attributes:true, attributeFilter:['class']});
-
-      // Año footer y promo en flotante
-      const y=$('y'); if(y) y.textContent=new Date().getFullYear();
-      const float=$('floatWA'); if(float){ const promo=(BUSINESS.promoTitle? BUSINESS.promoTitle+': ' : '')+(BUSINESS.promoMessage||''); float.href='https://wa.me/'+BUSINESS.phone.replace(/[^0-9]/g,'')+'?text='+encodeURIComponent(promo); }
-
-      // ESC
-      document.addEventListener('keydown', function(e){ if(e.key==='Escape') closeCart(); });
-    });
-
-    // ============ PRODUCT MODAL ============
-    function openProduct(id){
-      const p=PRODUCTS.find(x=>x.id===id); if(!p) return; const m=$('product-modal');
-      qs('[data-p-img]',m).src=p.image; qs('[data-p-title]',m).textContent=p.title; qs('[data-p-badge]',m).textContent=p.badge||''; qs('[data-p-price]',m).textContent=PEN.format(p.price); qs('[data-p-compare]',m).textContent=p.compareAt? PEN.format(p.compareAt):''; qs('[data-p-short]',m).textContent=p.short; qs('[data-p-details]',m).textContent=p.details;
-      const add=$('btnAddDetail'); if(add){ add.onclick=function(){ Cart.add(p.id); openCart(); m.close(); } }
-      if(m && m.showModal) m.showModal();
-    }
-  </script>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cdefs/%3E%3Ccircle cx='16' cy='16' r='14' fill='%2300E5FF'/%3E%3Cpath d='M11 17l3 3 7-7' stroke='%23031118' stroke-width='3' fill='none' stroke-linecap='round'/%3E%3C/svg%3E"/>
 </head>
 <body>
-  <!-- Header -->
-  <header class="sticky top-0 z-40 border-b border-white/10 backdrop-blur bg-black/30">
+  <!-- Promo Bar con countdown -->
+  <div id="promoBar" class="w-full text-sm text-black bg-gradient-to-r from-[var(--accent)] via-[var(--accent3)] to-[var(--accent2)]">
+    <div class="max-w-6xl mx-auto px-4 py-2 flex flex-col sm:flex-row items-center gap-2 justify-center text-center sm:text-left">
+      <div class="font-semibold">🔥 Hoy en Lima: delivery GRATIS + 10% OFF con <span class="underline">SEGURI10</span></div>
+      <div class="flex items-center gap-1"><span class="opacity-80">Termina en</span><span id="countdown" class="countdown font-extrabold">00:00:00</span></div>
+      <div class="flex items-center gap-2"><a href="#catalogSec" class="px-3 py-1.5 rounded-lg bg-black/10 font-semibold">Ver catálogo</a><button id="btnPromoWA" class="px-3 py-1.5 rounded-lg bg-black/20 font-semibold" type="button">WhatsApp</button></div>
+    </div>
+  </div>
+
+  <!-- Header glass -->
+  <header class="sticky top-0 z-40 border-b border-white/10 backdrop-blur bg-black/25">
     <div class="max-w-6xl mx-auto px-4 py-3 flex items-center gap-4">
-      <a id="logo" href="#" class="flex items-center gap-2 font-extrabold text-xl text-white">
-        <span class="inline-block w-7 h-7 rounded-full" style="background:linear-gradient(45deg,var(--accent),var(--accent2))"></span>
+      <a id="logo" href="#" class="flex items-center gap-2 font-extrabold text-xl heading text-white">
+        <span class="inline-block w-7 h-7 rounded-md" style="background:linear-gradient(45deg,var(--accent),var(--accent2))"></span>
         web - prueba 2
       </a>
       <nav class="hidden md:flex items-center gap-6 text-sm ml-6 text-slate-300">
         <a href="#catalogSec" class="hover:text-white">Productos</a>
         <a href="#como" class="hover:text-white">¿Cómo funciona?</a>
+        <a href="#reviews" class="hover:text-white">Opiniones</a>
         <a href="#faq" class="hover:text-white">FAQ</a>
-        <a href="#contacto" class="hover:text-white">Contacto</a>
       </nav>
       <div class="ml-auto flex items-center gap-2">
         <div class="relative hidden sm:block">
@@ -289,14 +94,16 @@
     </div>
   </header>
 
-  <!-- Hero distinto (oscuro + neón) -->
-  <section class="relative">
+  <!-- Hero con malla animada/neón -->
+  <section class="relative overflow-hidden">
+    <div class="gridbg"></div>
+    <div class="scanline"></div>
     <div class="max-w-6xl mx-auto px-4 py-16 md:py-20 grid md:grid-cols-2 gap-10 items-center">
-      <div>
-        <h1 class="text-4xl md:text-6xl font-extrabold leading-tight text-white">
-          Cámaras de seguridad <span style="background:linear-gradient(90deg,var(--accent),var(--accent2));-webkit-background-clip:text;background-clip:text;color:transparent">para Lima</span>
+      <div class="reveal">
+        <h1 class="heading text-4xl md:text-6xl font-extrabold leading-[1.08] text-white">
+          Seguridad inteligente para <span style="background:linear-gradient(90deg,var(--accent),var(--accent2));-webkit-background-clip:text;background-clip:text;color:transparent">hogares y negocios</span>
         </h1>
-        <p class="mt-5 text-slate-300 text-lg">Instalación guiada y soporte por WhatsApp. Entrega rápida en Lima. Paga con Yape/Plin o tarjeta.</p>
+        <p class="mt-5 text-slate-300 text-lg">Instalación guiada y soporte por WhatsApp. Entrega en 24h en Lima. Pagos: Yape, Plin, tarjeta.</p>
         <div class="mt-7 flex flex-wrap gap-3">
           <button id="btnHeroWA" class="inline-flex items-center justify-center rounded-2xl btn-pri px-5 py-3 font-semibold">Cotizar por WhatsApp</button>
           <a href="#catalogSec" class="inline-flex items-center justify-center rounded-2xl btn-sec px-5 py-3 font-semibold">Ver catálogo</a>
@@ -308,8 +115,8 @@
           <li>✓ Precios con IGV</li>
         </ul>
       </div>
-      <div class="relative">
-        <div class="rounded-3xl overflow-hidden shadow-2xl ring-1 ring-white/10">
+      <div class="relative reveal">
+        <div class="rounded-3xl overflow-hidden shadow-2xl ring-1 ring-white/10 neon-border">
           <img src="https://images.unsplash.com/photo-1585218332977-fd65fdbfb4b4?q=80&w=1200&auto=format&fit=crop" alt="Cámaras de seguridad" class="w-full h-[380px] object-cover"/>
         </div>
         <div class="absolute -bottom-6 -left-6 glass rounded-2xl shadow p-4 hidden md:flex gap-4 items-center border border-white/10">
@@ -324,8 +131,8 @@
   </section>
 
   <!-- Chips + filtros -->
-  <section class="max-w-6xl mx-auto px-4">
-    <div id="chips" class="flex gap-2 overflow-x-auto pb-2">
+  <section class="max-w-6xl mx-auto px-4 reveal">
+    <div id="chips" class="flex gap-2 overflow-x-auto pb-2 no-scrollbar">
       <button class="chip active px-3 py-2 rounded-full text-sm" data-type="all">Todos</button>
       <button class="chip px-3 py-2 rounded-full text-sm" data-type="wifi">Wi‑Fi</button>
       <button class="chip px-3 py-2 rounded-full text-sm" data-type="kit">Kits DVR/NVR</button>
@@ -336,9 +143,9 @@
 
   <!-- Catálogo -->
   <section id="catalogSec" class="max-w-6xl mx-auto px-4 py-10">
-    <div class="flex items-end justify-between mb-6">
+    <div class="flex items-end justify-between mb-6 reveal">
       <div>
-        <h2 class="text-2xl md:text-3xl font-bold text-white">Catálogo</h2>
+        <h2 class="heading text-2xl md:text-3xl font-bold text-white">Catálogo</h2>
         <p class="text-slate-400">IGV (18%) se desglosa en el carrito.</p>
       </div>
       <a href="#faq" class="text-sm" style="color:var(--accent)">¿Cuál me conviene?</a>
@@ -349,48 +156,50 @@
   <!-- Cómo funciona -->
   <section id="como" class="border-t border-white/10 bg-black/20">
     <div class="max-w-6xl mx-auto px-4 py-12 grid md:grid-cols-4 gap-6">
-      <div class="p-6 rounded-2xl card"><div class="text-3xl">🛒</div><h3 class="font-bold mt-2 text-white">1. Elige</h3><p class="text-sm text-slate-300">Añade productos al carrito o cotiza directo.</p></div>
-      <div class="p-6 rounded-2xl card"><div class="text-3xl">💬</div><h3 class="font-bold mt-2 text-white">2. Confirma</h3><p class="text-sm text-slate-300">Coordinamos por WhatsApp entrega e instalación.</p></div>
-      <div class="p-6 rounded-2xl card"><div class="text-3xl">🚚</div><h3 class="font-bold mt-2 text-white">3. Recibe</h3><p class="text-sm text-slate-300">Delivery en Lima o envío nacional.</p></div>
-      <div class="p-6 rounded-2xl card"><div class="text-3xl">📱</div><h3 class="font-bold mt-2 text-white">4. Monitorea</h3><p class="text-sm text-slate-300">App móvil con alertas en tiempo real.</p></div>
+      <div class="p-6 rounded-2xl card reveal"><div class="text-3xl">🛒</div><h3 class="font-bold mt-2 text-white">1. Elige</h3><p class="text-sm text-slate-300">Añade productos al carrito o cotiza directo.</p></div>
+      <div class="p-6 rounded-2xl card reveal"><div class="text-3xl">💬</div><h3 class="font-bold mt-2 text-white">2. Confirma</h3><p class="text-sm text-slate-300">Coordinamos por WhatsApp entrega e instalación.</p></div>
+      <div class="p-6 rounded-2xl card reveal"><div class="text-3xl">🚚</div><h3 class="font-bold mt-2 text-white">3. Recibe</h3><p class="text-sm text-slate-300">Delivery en Lima o envío nacional.</p></div>
+      <div class="p-6 rounded-2xl card reveal"><div class="text-3xl">📱</div><h3 class="font-bold mt-2 text-white">4. Monitorea</h3><p class="text-sm text-slate-300">App móvil con alertas en tiempo real.</p></div>
     </div>
   </section>
 
-  <!-- FAQ -->
-  <section id="faq" class="max-w-6xl mx-auto px-4 py-12">
-    <h2 class="text-2xl md:text-3xl font-bold text-white mb-6">Preguntas frecuentes</h2>
-    <div class="grid md:grid-cols-2 gap-6">
-      <details class="p-5 rounded-2xl card" open>
-        <summary class="font-semibold cursor-pointer text-white">¿Incluye instalación?</summary>
-        <p class="mt-3 text-sm text-slate-300">Guía por WhatsApp sin costo y visitas técnicas a pedido (costo adicional en Lima). Para kits DVR recomendamos técnico.</p>
-      </details>
-      <details class="p-5 rounded-2xl card">
-        <summary class="font-semibold cursor-pointer text-white">¿Necesito internet?</summary>
-        <p class="mt-3 text-sm text-slate-300">Las cámaras Wi‑Fi requieren red 2.4 GHz. Los kits DVR pueden verse por internet si conectas el DVR al router.</p>
-      </details>
-      <details class="p-5 rounded-2xl card">
-        <summary class="font-semibold cursor-pointer text-white">¿Métodos de pago?</summary>
-        <p class="mt-3 text-sm text-slate-300">Yape, Plin y transferencia bancaria. Consultar por contraentrega en Lima.</p>
-      </details>
-      <details class="p-5 rounded-2xl card">
-        <summary class="font-semibold cursor-pointer text-white">¿Garantía?</summary>
-        <p class="mt-3 text-sm text-slate-300">Garantía por defectos de fábrica de 6 a 12 meses.</p>
-      </details>
+  <!-- Reseñas -->
+  <section id="reviews" class="max-w-6xl mx-auto px-4 py-12">
+    <div class="flex items-center justify-between mb-4 reveal">
+      <h2 class="heading text-2xl md:text-3xl font-bold text-white">Opiniones de clientes</h2>
+      <div class="hidden sm:flex gap-2">
+        <button id="revPrev" class="px-3 py-2 rounded-lg btn-sec" type="button">←</button>
+        <button id="revNext" class="px-3 py-2 rounded-lg btn-pri text-black" type="button">→</button>
+      </div>
+    </div>
+    <div id="revViewport" class="no-scrollbar overflow-x-auto snap-x snap-mandatory reveal">
+      <div class="flex gap-4 pb-2">
+        <article class="snap-start min-w-[85%] md:min-w-[45%] lg:min-w-[30%] p-4 rounded-2xl card"><div class="flex items-center gap-3"><div class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center">JM</div><div><div class="font-semibold text-white">Javier M. — Miraflores</div><div class="text-xs text-slate-400">★★★★★ Instalación guiada</div></div></div><p class="mt-3 text-slate-300 text-sm">La cámara 360 quedó perfecta. Me ayudaron por WhatsApp a configurarla en minutos.</p></article>
+        <article class="snap-start min-w-[85%] md:min-w-[45%] lg:min-w-[30%] p-4 rounded-2xl card"><div class="flex items-center gap-3"><div class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center">PG</div><div><div class="font-semibold text-white">Paola G. — Surco</div><div class="text-xs text-slate-400">★★★★★ Entrega rápida</div></div></div><p class="mt-3 text-slate-300 text-sm">Pedido llegó el mismo día. Excelente atención y precios.</p></article>
+        <article class="snap-start min-w-[85%] md:min-w-[45%] lg:min-w-[30%] p-4 rounded-2xl card"><div class="flex items-center gap-3"><div class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center">RA</div><div><div class="font-semibold text-white">Rodrigo A. — La Molina</div><div class="text-xs text-slate-400">★★★★★ DVR para negocio</div></div></div><p class="mt-3 text-slate-300 text-sm">El kit DVR funciona perfecto para mi tienda. Ver desde el celular es clave.</p></article>
+        <article class="snap-start min-w-[85%] md:min-w-[45%] lg:min-w-[30%] p-4 rounded-2xl card"><div class="flex items-center gap-3"><div class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center">LC</div><div><div class="font-semibold text-white">Lorena C. — San Borja</div><div class="text-xs text-slate-400">★★★★★ Soporte</div></div></div><p class="mt-3 text-slate-300 text-sm">Resolvieron mis dudas rápido. Muy profesionales.</p></article>
+        <article class="snap-start min-w-[85%] md:min-w-[45%] lg:min-w-[30%] p-4 rounded-2xl card"><div class="flex items-center gap-3"><div class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center">FS</div><div><div class="font-semibold text-white">Franco S. — Independencia</div><div class="text-xs text-slate-400">★★★★★ Precio/calidad</div></div></div><p class="mt-3 text-slate-300 text-sm">Buena calidad por el precio. Recomendados.</p></article>
+        <article class="snap-start min-w-[85%] md:min-w-[45%] lg:min-w-[30%] p-4 rounded-2xl card"><div class="flex items-center gap-3"><div class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center">AM</div><div><div class="font-semibold text-white">Andrea M. — Barranco</div><div class="text-xs text-slate-400">★★★★★ Timbre smart</div></div></div><p class="mt-3 text-slate-300 text-sm">El timbre con cámara me avisa al teléfono; súper útil.</p></article>
+      </div>
+    </div>
+    <div class="sm:hidden flex justify-center gap-2 mt-3">
+      <button id="revPrev_m" class="px-3 py-2 rounded-lg btn-sec" type="button">←</button>
+      <button id="revNext_m" class="px-3 py-2 rounded-lg btn-pri text-black" type="button">→</button>
     </div>
   </section>
 
   <!-- Contacto -->
   <section id="contacto" class="border-t border-white/10 bg-black/20">
     <div class="max-w-6xl mx-auto px-4 py-12 grid md:grid-cols-2 gap-8 items-center">
-      <div>
-        <h2 class="text-2xl md:text-3xl font-bold text-white">¿Necesitas asesoría?</h2>
+      <div class="reveal">
+        <h2 class="heading text-2xl md:text-3xl font-bold text-white">¿Necesitas asesoría?</h2>
         <p class="text-slate-300 mt-2">Cuéntanos tu caso: hogar, departamento, tienda o almacén. Te recomendamos el equipo ideal.</p>
         <div class="mt-4 flex gap-3">
           <button id="btnContactWA" class="inline-flex items-center justify-center rounded-2xl btn-pri px-5 py-3 font-semibold">Escribir por WhatsApp</button>
           <a href="#catalogSec" class="inline-flex items-center justify-center rounded-2xl btn-sec px-5 py-3 font-semibold">Ver catálogo</a>
         </div>
       </div>
-      <form onsubmit="return false;" class="p-6 rounded-2xl card">
+      <form onsubmit="return false;" class="p-6 rounded-2xl card reveal">
         <div class="grid sm:grid-cols-2 gap-4">
           <div>
             <label class="text-sm text-slate-300">Nombre</label>
@@ -413,11 +222,11 @@
   <!-- Footer -->
   <footer class="border-t border-white/10">
     <div class="max-w-6xl mx-auto px-4 py-10 grid md:grid-cols-4 gap-8">
-      <div>
-        <div class="font-extrabold text-xl text-white">web - prueba 2</div>
+      <div class="reveal">
+        <div class="font-extrabold text-xl text-white heading">web - prueba 2</div>
         <p class="text-sm text-slate-400 mt-2">Protegemos lo que más importa. Lima, Perú.</p>
       </div>
-      <div>
+      <div class="reveal">
         <div class="font-semibold text-white">Ayuda</div>
         <ul class="mt-2 space-y-1 text-sm text-slate-400">
           <li><a href="#faq" class="hover:text-white">FAQ</a></li>
@@ -425,7 +234,7 @@
           <li><a href="#como" class="hover:text-white">Cómo comprar</a></li>
         </ul>
       </div>
-      <div>
+      <div class="reveal">
         <div class="font-semibold text-white">Legal</div>
         <ul class="mt-2 space-y-1 text-sm text-slate-400">
           <li>Precios en PEN (S/)</li>
@@ -433,7 +242,7 @@
           <li>Garantía por fabricante</li>
         </ul>
       </div>
-      <div>
+      <div class="reveal">
         <div class="font-semibold text-white">WhatsApp</div>
         <p class="text-sm text-slate-400 mt-2">+51 954 118 198</p>
         <button id="btnFooterWA" class="mt-3 inline-flex items-center rounded-xl btn-pri text-black px-4 py-2 font-semibold">Chatear ahora</button>
@@ -466,10 +275,15 @@
         </div>
         <div id="cart-list" class="p-4 overflow-y-auto max-h-[50vh]"></div>
         <div class="p-4 border-t border-white/10 space-y-2">
+          <div class="flex items-center gap-2">
+            <input id="coupon" class="flex-1 bg-transparent border border-white/10 rounded-xl px-3 py-2 text-sm placeholder:text-slate-500" placeholder="¿Tienes cupón? ej. SEGURI10" />
+            <button id="btnApplyCoupon" class="rounded-xl btn-sec px-3 py-2 text-sm">Aplicar</button>
+          </div>
           <div class="flex justify-between text-sm text-slate-300"><span>Subtotal</span><span data-subtotal></span></div>
           <div class="flex justify-between text-sm text-slate-300"><span>IGV (18%)</span><span data-igv></span></div>
+          <div class="flex justify-between text-sm text-slate-300"><span>Descuento</span><span data-discount>—</span></div>
           <div class="flex justify-between text-sm text-slate-300"><span>Delivery</span><span data-delivery></span></div>
-          <div class="flex justify-between font-semibold text-lg text-white pt-2"><span>Total</span><span data-total></span></div>
+          <div class="flex justify-between font-semibold text-lg text-white pt-1"><span>Total</span><span data-total></span></div>
           <div class="grid grid-cols-2 gap-2 pt-2">
             <button id="btnCheckout" class="rounded-xl btn-pri py-3 font-semibold" type="button">Finalizar por WhatsApp</button>
             <button id="btnClearCart" class="rounded-xl btn-sec py-3 font-semibold" type="button">Vaciar</button>
@@ -487,7 +301,7 @@
         <div class="text-xs font-bold" style="color:var(--accent)" data-p-badge></div>
         <h3 class="text-2xl font-bold text-white" data-p-title></h3>
         <div class="flex items-center gap-3">
-          <div class="text-2xl font-extrabold price" data-p-price></div>
+          <div class="text-2xl font-extrabold text-white" data-p-price></div>
           <div class="text-sm line-through text-slate-400" data-p-compare></div>
         </div>
         <p class="text-slate-300" data-p-short></p>
@@ -505,8 +319,258 @@
 
   <!-- Error overlay -->
   <div id="errOverlay" style="position:fixed;left:0;right:0;bottom:0;background:#fee2e2;color:#991b1b;padding:8px 12px;font:12px/1.4 system-ui,-apple-system,Segoe UI,Roboto,Helvetica;display:none;z-index:9999"></div>
+
   <script>
-    window.addEventListener('error', function(e){ var box=document.getElementById('errOverlay'); if(!box) return; box.style.display='block'; box.textContent='Error: '+(e.message||'unknown')+(e.filename? ' — '+e.filename:'')+(e.lineno? ' @'+e.lineno+':'+e.colno:''); console.error(e.error||e.message); });
+    // =================== CONFIG ===================
+    const BUSINESS = {
+      name: 'web - prueba 2',
+      phone: '+51954118198',          // WhatsApp Perú
+      igv: 0.18,                      // IGV 18%
+      deliveryFlat: 10,               // Base delivery Lima
+      deliveryIncludedPromo: true,    // Delivery gratis activo
+      promoTitle: 'Promo Lima',
+      promoMessage: 'Delivery GRATIS + 10% OFF con código SEGURI10 (hoy)'
+    };
+
+    const PRODUCTS = [
+      { id:'cam-mini-360', title:'Cámara Wi‑Fi 360° Mini', price:159, compareAt:199, badge:'Más vendida', rating:4.7, stock:42, type:'wifi', short:'Visión 360°, audio 2 vías, detección de movimiento.', details:'Conéctala a 2.4 GHz. Visión nocturna, base magnética, microSD.', image:'https://images.unsplash.com/photo-1582744748899-278fd10b0716?q=80&w=1200&auto=format&fit=crop' },
+      { id:'kit-dvr-4', title:'Kit DVR 4 Cámaras 1080p', price:520, compareAt:599, badge:'Pack ahorro', rating:4.6, stock:12, type:'kit', short:'4 cámaras + DVR 4ch, acceso remoto, listo para instalar.', details:'Incluye cables, fuente y app móvil. Requiere HDD (opcional).', image:'https://images.unsplash.com/photo-1595686823819-3dd8d1f409e2?q=80&w=1200&auto=format&fit=crop' },
+      { id:'timbre-smart', title:'Timbre Inteligente con Cámara', price:159, compareAt:189, badge:'Nuevo', rating:4.5, stock:28, type:'timbre', short:'Notificaciones al móvil, visión nocturna, batería recargable.', details:'Atiende desde cualquier lugar. Detección de movimiento.', image:'https://images.unsplash.com/photo-1518432031352-d6fc5c10da5a?q=80&w=1200&auto=format&fit=crop' },
+      { id:'cam-exterior-bullet', title:'Cámara Exterior Bullet 1080p', price:189, compareAt:229, badge:'Exterior', rating:4.6, stock:17, type:'exterior', short:'IP66, visión nocturna, apta para intemperie.', details:'Cableada/Wi‑Fi según modelo, soporte metálico.', image:'https://images.unsplash.com/photo-1543466835-00a7907e9de1?q=80&w=1200&auto=format&fit=crop' }
+    ];
+
+    // =================== UTIL ===================
+    const PEN = new Intl.NumberFormat('es-PE', { style:'currency', currency:'PEN', maximumFractionDigits:2 });
+    function $(id){ return document.getElementById(id); }
+    function qs(s, el=document){ return el.querySelector(s); }
+
+    // =================== ESTADO ===================
+    const State = {
+      coupon: localStorage.getItem('coupon_web_prueba2') || '',
+      getCoupon(){ return this.coupon.toUpperCase(); },
+      setCoupon(code){ this.coupon = (code||'').toUpperCase(); localStorage.setItem('coupon_web_prueba2', this.coupon); }
+    };
+
+    // =================== CARRITO ===================
+    window.openCart  = function(){ document.documentElement.classList.add('cart-open'); };
+    window.closeCart = function(){ document.documentElement.classList.remove('cart-open'); };
+
+    const Cart = {
+      key:'cart_web_prueba2_elegant',
+      get(){ try { return JSON.parse(localStorage.getItem(this.key))||[] } catch { return [] } },
+      set(items){ localStorage.setItem(this.key, JSON.stringify(items)); renderCart(); },
+      add(id){ const items=this.get(); const i=items.findIndex(x=>x.id===id); if(i>-1) items[i].qty++; else items.push({id,qty:1}); this.set(items); },
+      remove(id){ this.set(this.get().filter(x=>x.id!==id)); },
+      update(id, qty){ const items=this.get(); const it=items.find(x=>x.id===id); if(!it) return; it.qty=Math.max(1, qty|0); this.set(items); },
+      clear(){ this.set([]); }
+    };
+
+    function calcTotals(){
+      const items = Cart.get();
+      let subtotal = 0; items.forEach(({id,qty})=>{ const p=PRODUCTS.find(x=>x.id===id); subtotal += (p?p.price:0)*qty; });
+      const igv = +(subtotal * BUSINESS.igv).toFixed(2);
+      const coupon = State.getCoupon();
+      const discount = (coupon==='SEGURI10') ? +(subtotal*0.10).toFixed(2) : 0;
+      const delivery = BUSINESS.deliveryIncludedPromo ? 0 : (items.length? BUSINESS.deliveryFlat:0);
+      const total = subtotal + igv + delivery - discount;
+      return { items, subtotal, igv, discount, delivery, total, coupon };
+    }
+
+    // =================== RENDER ===================
+    function renderCatalog(list){
+      const L = list||PRODUCTS; const wrap = $('catalog');
+      wrap.innerHTML = L.map(p=>{
+        return (
+          '<article class="card rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition neon-border">'+
+            (p.badge? '<div class="absolute m-3 text-[10px] font-semibold text-black" style="background:linear-gradient(90deg,var(--accent),var(--accent2));border-radius:999px;padding:.35rem .5rem">'+p.badge+'</div>':'' )+
+            '<button type="button" class="block w-full text-left js-open-product" data-id="'+p.id+'">'+
+              '<img loading="lazy" src="'+p.image+'" alt="'+p.title+'" class="h-52 w-full object-cover"/>'+
+              '<div class="p-4">'+
+                '<h3 class="text-lg font-semibold mb-1 text-white">'+p.title+'</h3>'+
+                '<p class="text-sm" style="color:var(--muted)">'+p.short+'</p>'+
+                '<div class="mt-3 flex items-center gap-2">'+
+                  '<span class="text-xl font-extrabold text-white">'+PEN.format(p.price)+'</span>'+
+                  (p.compareAt? '<span class="text-sm line-through" style="color:var(--muted)">'+PEN.format(p.compareAt)+'</span>':'' )+
+                '</div>'+
+                '<div class="mt-2 text-xs" style="color:var(--accent)">★ '+p.rating+' · Stock: '+p.stock+'</div>'+
+              '</div>'+
+            '</button>'+
+            '<div class="p-4 pt-0">'+
+              '<button type="button" class="w-full inline-flex items-center justify-center gap-2 rounded-xl btn-pri py-2.5 font-semibold js-add-cart" data-id="'+p.id+'">➕ Añadir</button>'+
+            '</div>'+
+          '</article>'
+        );
+      }).join('');
+      revealElements();
+    }
+
+    function renderCart(){
+      const {items,subtotal,igv,discount,delivery,total,coupon} = calcTotals();
+      const list=$('cart-list');
+      if(!items.length){ list.innerHTML='<div class="text-center text-slate-400 py-12">Tu carrito está vacío.</div>'; }
+      else{
+        list.innerHTML = items.map(({id,qty})=>{
+          const p=PRODUCTS.find(x=>x.id===id);
+          return (
+            '<div class="flex gap-3 py-3 border-b border-white/10">'+
+              '<img src="'+p.image+'" alt="'+p.title+'" class="w-16 h-16 rounded object-cover"/>'+
+              '<div class="flex-1">'+
+                '<div class="flex justify-between gap-2">'+
+                  '<h4 class="font-semibold text-white">'+p.title+'</h4>'+
+                  '<button type="button" class="text-slate-400 hover:text-red-400" title="Quitar" data-action="rem" data-id="'+p.id+'">✕</button>'+
+                '</div>'+
+                '<div class="text-sm text-slate-400">'+PEN.format(p.price)+' c/u</div>'+
+                '<div class="mt-2 flex items-center gap-2">'+
+                  '<button type="button" class="px-2 py-1 border border-white/10 rounded" data-action="dec" data-id="'+p.id+'">−</button>'+
+                  '<span class="w-8 text-center">'+qty+'</span>'+
+                  '<button type="button" class="px-2 py-1 border border-white/10 rounded" data-action="inc" data-id="'+p.id+'">＋</button>'+
+                '</div>'+
+              '</div>'+
+            '</div>'
+          );
+        }).join('');
+      }
+      qs('[data-subtotal]').textContent=PEN.format(subtotal);
+      qs('[data-igv]').textContent=PEN.format(igv);
+      qs('[data-discount]').textContent=discount? ('− '+PEN.format(discount)) : '—';
+      qs('[data-delivery]').textContent= delivery? PEN.format(delivery) : (BUSINESS.deliveryIncludedPromo? 'Incluido' : PEN.format(0));
+      qs('[data-total]').textContent=PEN.format(Math.max(total,0));
+      const c=$('coupon'); if(c) c.value = coupon || '';
+    }
+
+    // =================== FILTROS ===================
+    function applyFilters(){
+      const q = ($('search') && $('search').value || '').toLowerCase().trim();
+      const activeChip = qs('.chip.active'); const type = activeChip ? activeChip.getAttribute('data-type') : '';
+      let list = PRODUCTS.filter(p=> p.title.toLowerCase().includes(q) || p.short.toLowerCase().includes(q));
+      if(type && type!=='all'){ list = list.filter(p=>p.type===type); }
+      const sortEl = $('sort'); const sort = sortEl? sortEl.value : '';
+      if(sort==='price-asc') list.sort((a,b)=>a.price-b.price);
+      if(sort==='price-desc') list.sort((a,b)=>b.price-a.price);
+      if(sort==='rating') list.sort((a,b)=>b.rating-a.rating);
+      renderCatalog(list);
+    }
+
+    // =================== WHATSAPP ===================
+    function buildWhatsAppText(){
+      const t=calcTotals(); const {items,subtotal,igv,discount,delivery,total} = t;
+      const nameEl=$('fName'), distEl=$('fDistrict'), msgEl=$('fMsg');
+      const name=(nameEl&&nameEl.value||'').trim(); const district=(distEl&&distEl.value||'').trim(); const msg=(msgEl&&msgEl.value||'').trim();
+      const header=(BUSINESS.promoTitle? BUSINESS.promoTitle+'\n':'' ) + (BUSINESS.promoMessage? BUSINESS.promoMessage+'\n\n':'' );
+      let body='';
+      if(items.length){
+        const lines = items.map(({id,qty})=>{ const p=PRODUCTS.find(x=>x.id===id); return '• '+p.title+' x'+qty+' = '+PEN.format(p.price*qty); }).join('\n');
+        body = 'Pedido:\n'+lines+'\n\n'+
+               'Subtotal: '+PEN.format(subtotal)+'\n'+
+               'IGV: '+PEN.format(igv)+'\n'+
+               (discount? ('Descuento: − '+PEN.format(discount)+'\n') : '')+
+               'Delivery: '+(BUSINESS.deliveryIncludedPromo? 'Incluido' : PEN.format(delivery))+'\n'+
+               'TOTAL: '+PEN.format(Math.max(total,0));
+      } else { body='Hola, quiero información sobre las cámaras y la promo de hoy.'; }
+      const footer='\n\nDatos:\nNombre: '+name+'\nDistrito: '+district+'\nMensaje: '+msg;
+      return header+body+footer;
+    }
+    function checkoutWhatsApp(){
+      const url='https://wa.me/'+BUSINESS.phone.replace(/[^0-9]/g,'')+'?text='+encodeURIComponent(buildWhatsAppText());
+      window.open(url,'_blank');
+    }
+
+    // =================== INIT / EVENTS ===================
+    document.addEventListener('DOMContentLoaded', function(){
+      renderCatalog(); renderCart(); revealElements();
+
+      // Promo countdown (hasta 23:59)
+      (function(){
+        var bar=$('promoBar'); var el=$('countdown'); var btn=$('btnPromoWA'); if(btn) btn.addEventListener('click', checkoutWhatsApp);
+        if(!bar||!el) return; function pad(n){ return (n<10?'0':'')+n }
+        function tick(){ var now=new Date(); var end=new Date(); end.setHours(23,59,59,999); var diff=end-now; if(diff<=0){ bar.style.display='none'; return; } var h=Math.floor(diff/36e5); diff-=h*36e5; var m=Math.floor(diff/6e4); diff-=m*6e4; var s=Math.floor(diff/1e3); el.textContent=pad(h)+':'+pad(m)+':'+pad(s); }
+        tick(); setInterval(tick,1000);
+      })();
+
+      // Chips categorías
+      const chipWrap = $('chips'); if(chipWrap){ chipWrap.addEventListener('click', function(e){ const c=e.target.closest('.chip'); if(!c) return; qs('.chip.active')?.classList.remove('active'); c.classList.add('active'); applyFilters(); }); }
+
+      // Buscador y sort
+      $('search') && $('search').addEventListener('input', applyFilters);
+      $('sort') && $('sort').addEventListener('change', applyFilters);
+
+      // Delegación Catálogo
+      const cat=$('catalog'); if(cat){ cat.addEventListener('click', function(e){ const openBtn=e.target.closest('.js-open-product'); const addBtn=e.target.closest('.js-add-cart'); if(openBtn){ openProduct(openBtn.getAttribute('data-id')); } if(addBtn){ Cart.add(addBtn.getAttribute('data-id')); openCart(); } }); }
+
+      // Delegación Carrito (sheet)
+      const cartList=$('cart-list'); if(cartList){ cartList.addEventListener('click', function(e){ const t=e.target.closest('[data-action]'); if(!t) return; const act=t.getAttribute('data-action'); const id=t.getAttribute('data-id'); if(act==='inc') Cart.add(id); if(act==='dec'){ const items=Cart.get(); const it=items.find(x=>x.id===id); if(it){ it.qty<=1? Cart.remove(id) : Cart.update(id, it.qty-1); } } if(act==='rem') Cart.remove(id); }); }
+
+      // Aplicar cupón
+      $('btnApplyCoupon') && $('btnApplyCoupon').addEventListener('click', function(){ const c=$('coupon').value.trim().toUpperCase(); State.setCoupon(c); renderCart(); });
+
+      // Botones WhatsApp
+      ;['btnHeroWA','btnContactWA','btnCheckout','btnCheckoutForm','btnFooterWA','dockWA'].forEach(i=>{ const el=$(i); if(el) el.addEventListener('click', checkoutWhatsApp); });
+
+      // Acciones de Sheet
+      $('btnOpenCart') && $('btnOpenCart').addEventListener('click', openCart);
+      $('btnCloseCart') && $('btnCloseCart').addEventListener('click', closeCart);
+      $('sheet-backdrop') && $('sheet-backdrop').addEventListener('click', closeCart);
+      $('btnClearCart') && $('btnClearCart').addEventListener('click', function(){ Cart.clear(); });
+      $('dockCart') && $('dockCart').addEventListener('click', openCart);
+      $('dockCatalog') && $('dockCatalog').addEventListener('click', function(){ $('catalogSec').scrollIntoView({behavior:'smooth'}); });
+
+      // Estado visual del Sheet
+      const sheet=$('cart-sheet'); const bd=$('sheet-backdrop'); function updateSheet(){ const open=document.documentElement.classList.contains('cart-open'); sheet.style.transform = open? 'translateY(0)' : 'translateY(100%)'; bd.style.opacity=open? '1':'0'; bd.style.pointerEvents=open? 'auto':'none'; }
+      updateSheet(); new MutationObserver(updateSheet).observe(document.documentElement,{attributes:true, attributeFilter:['class']});
+
+      // Año footer y promo en flotante
+      const y=$('y'); if(y) y.textContent=new Date().getFullYear();
+      const float=$('floatWA'); if(float){ const promo=(BUSINESS.promoTitle? BUSINESS.promoTitle+': ' : '')+(BUSINESS.promoMessage||''); float.href='https://wa.me/'+BUSINESS.phone.replace(/[^0-9]/g,'')+'?text='+encodeURIComponent(promo); }
+
+      // ESC
+      document.addEventListener('keydown', function(e){ if(e.key==='Escape') closeCart(); });
+    });
+
+    // =================== PRODUCT MODAL ===================
+    function openProduct(id){
+      const p=PRODUCTS.find(x=>x.id===id); if(!p) return; const m=$('product-modal');
+      qs('[data-p-img]',m).src=p.image; qs('[data-p-title]',m).textContent=p.title; qs('[data-p-badge]',m).textContent=p.badge||''; qs('[data-p-price]',m).textContent=PEN.format(p.price); qs('[data-p-compare]',m).textContent=p.compareAt? PEN.format(p.compareAt):''; qs('[data-p-short]',m).textContent=p.short; qs('[data-p-details]',m).textContent=p.details;
+      const add=$('btnAddDetail'); if(add){ add.onclick=function(){ Cart.add(p.id); openCart(); m.close(); } }
+      if(m && m.showModal) m.showModal();
+    }
+
+    // =================== REVEAL ===================
+    function revealElements(){
+      const els = document.querySelectorAll('.reveal');
+      const obs = new IntersectionObserver((entries)=>{ entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('show'); obs.unobserve(e.target); } }); }, { threshold:.12 });
+      els.forEach(el=>obs.observe(el));
+    }
+
+    // =================== REVIEWS ===================
+    (function(){
+      document.addEventListener('DOMContentLoaded', function(){
+        var vp=$('revViewport'); if(!vp) return; var prev=$('revPrev'); var next=$('revNext'); var prev_m=$('revPrev_m'); var next_m=$('revNext_m');
+        function go(dir){ var delta=vp.clientWidth*0.9*(dir>0?1:-1); vp.scrollBy({left:delta,behavior:'smooth'}); if(dir>0 && vp.scrollLeft + vp.clientWidth >= vp.scrollWidth - 5){ setTimeout(function(){ vp.scrollTo({left:0,behavior:'smooth'}); },600); } }
+        [prev,prev_m].forEach(function(b){ if(b) b.addEventListener('click', function(){ go(-1); }); });
+        [next,next_m].forEach(function(b){ if(b) b.addEventListener('click', function(){ go(1); }); });
+        var auto=setInterval(function(){ go(1); },5000); function pause(){ clearInterval(auto); } function resume(){ auto=setInterval(function(){ go(1); },5000); }
+        vp.addEventListener('mouseenter', pause); vp.addEventListener('mouseleave', resume); vp.addEventListener('pointerdown', pause); vp.addEventListener('pointerup', resume);
+      });
+    })();
+
+    // =================== CATALOGO Y BUSQUEDA ===================
+    document.addEventListener('DOMContentLoaded', function(){
+      renderCatalog(); // ensure initial
+    });
+
+    // =================== ERROR OVERLAY ===================
+    window.addEventListener('error', function(e){ var box=$('errOverlay'); if(!box) return; box.style.display='block'; box.textContent='Error: '+(e.message||'unknown')+(e.filename? ' — '+e.filename:'')+(e.lineno? ' @'+e.lineno+':'+e.colno:''); console.error(e.error||e.message); });
+  </script>
+
+  <!-- JSON-LD básico -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "web - prueba 2",
+    "url": "https://example.com",
+    "contactPoint": {"@type": "ContactPoint", "contactType": "sales", "telephone": "+51954118198"}
+  }
   </script>
 </body>
 </html>
