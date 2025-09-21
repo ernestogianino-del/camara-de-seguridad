@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Tienda de Cámaras de Seguridad | Protección 24/7</title>
+  <meta name="description" content="Compra cámaras Wi-Fi, kits DVR y timbres inteligentes. Envíos en Lima y todo el Perú. Paga por Yape/Plin o coordina por WhatsApp." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    :root{ --brand:#00a884; --brandDark:#00866d; }
+    html{ scroll-behavior:smooth }
+    body{ font-family:'Inter',system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,'Apple Color Emoji','Segoe UI Emoji'; }
+    .glass{ backdrop-filter:saturate(180%) blur(8px); background:rgba(255,255,255,.78) }
+  </style>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath fill='%2300a884' d='M16 2a14 14 0 100 28 14 14 0 000-28zm6.8 10.2l-4.7 2.7a3 3 0 00-1.4 1.9l-1 5a.7.7 0 01-1.3.1l-2.2-4.6-4.7-1.4a.7.7 0 01-.1-1.3l5-1a3 3 0 001.9-1.4l2.7-4.7a.7.7 0 011.2 0l1.9 3.3 3.3 1.9a.7.7 0 010 1.3z'/%3E%3C/svg%3E" />
+
+  <script>
+    // ===== Configuración =====
+    const BUSINESS = {
+      name: 'SeguriCam Perú',
+      phone: '+51954118198', // WhatsApp (Perú)
+      igv: 0.18,
+      deliveryFlat: 10,
+      deliveryIncludedPromo: true, // Delivery incluido por promo
+      promoTitle: 'Promo de lanzamiento',
+      promoMessage: 'Hoy: delivery GRATIS en Lima + 10% OFF con el código SEGURI10 (hasta 11:59 p.m.)'
+    };
+
+    // ===== Catálogo =====
+    const PRODUCTS = [
+      {
+        id: 'cam-mini-360',
+        title: 'Cámara Wi-Fi 360° Mini',
+        price: 159,
+        compareAt: 199,
+        badge: 'Más vendida',
+        rating: 4.7,
+        stock: 42,
+        short: 'Visión 360°, audio 2 vías, detección de movimiento.',
+        details: 'Conéctala a tu red 2.4 GHz y monitorea desde tu celular. Base magnética, visión nocturna y grabación microSD.',
+        image: 'https://images.unsplash.com/photo-1582744748899-278fd10b0716?q=80&w=1200&auto=format&fit=crop'
+      },
+      {
+        id: 'kit-dvr-4',
+        title: 'Kit DVR 4 Cámaras 1080p',
+        price: 520,
+        compareAt: 599,
+        badge: 'Pack ahorro',
+        rating: 4.6,
+        stock: 12,
+        short: '4 cámaras + DVR 4ch, acceso remoto, listo para instalar.',
+        details: 'Incluye cables, fuente, mouse y app móvil. Ideal para negocios y casas. Soporta disco duro (no incluido).',
+        image: 'https://images.unsplash.com/photo-1595686823819-3dd8d1f409e2?q=80&w=1200&auto=format&fit=crop'
+      },
+      {
+        id: 'timbre-smart',
+        title: 'Timbre Inteligente con Cámara',
+        price: 159,
+        compareAt: 189,
+        badge: 'Nuevo',
+        rating: 4.5,
+        stock: 28,
+        short: 'Notificaciones al móvil, visión nocturna, batería recargable.',
+        details: 'Atiende desde cualquier lugar. Detección de movimiento y grabación en nube u opción microSD.',
+        image: 'https://images.unsplash.com/photo-1518432031352-d6fc5c10da5a?q=80&w=1200&auto=format&fit=crop'
+      }
+    ];
+
+    // ===== Utilidades =====
+    const PEN = new Intl.NumberFormat('es-PE', { style:'currency', currency:'PEN', maximumFractionDigits:2 });
+    const qs = (s, el=document) => el.querySelector(s);
+
+    // ===== Carrito (localStorage) =====
+    const Cart = {
+      key: 'seguricam_cart_v1',
+      get(){ try { return JSON.parse(localStorage.getItem(this.key)) || []; } catch { return []; } },
+      set(items){ localStorage.setItem(this.key, JSON.stringify(items)); renderCart(); },
+      add(id){ const items = this.get(); const i = items.findIndex(x=>x.id===id); if(i>-1){ items[i].qty++; } else { items.push({id, qty:1}); } this.set(items); },
+      remove(id){ this.set(this.get().filter(x=>x.id!==id)); },
+      update(id, qty){ const items = this.get(); const it = items.find(x=>x.id===id); if(!it) return; it.qty = Math.max(1, qty|0); this.set(items); },
+      clear(){ this.set([]); }
+    };
+
+    function calcTotals(){
+      const items = Cart.get();
+      let subtotal = 0;
+      items.forEach(({id, qty})=>{ const p = PRODUCTS.find(x=>x.id===id); subtotal += (p? p.price:0) * qty; });
+      const igv = +(subtotal * BUSINESS.igv).toFixed(2);
+      const delivery = BUSINESS.deliveryIncludedPromo ? 0 : (items.length ? BUSINESS.deliveryFlat : 0);
+      const total = subtotal + igv + delivery;
+      return { items, subtotal, igv, delivery, total };
+    }
+
+    function openCart(){ document.documentElement.classList.add('cart-open'); }
+    function closeCart(){ document.documentElement.classList.remove('cart-open'); }
+
+    function openProduct(id){
+      const p = PRODUCTS.find(x=>x.id===id); if(!p) return;
+      const m = qs('#product-modal');
+      qs('[data-p-img]', m).src = p.image;
+      qs('[data-p-title]', m).textContent = p.title;
+      qs('[data-p-badge]', m).textContent = p.badge || '';
+      qs('[data-p-price]', m).textContent = PEN.format(p.price);
+      qs('[data-p-compare]', m).textContent = p.compareAt ? PEN.format(p.compareAt) : '';
+      qs('[data-p-short]', m).textContent = p.short;
+      qs('[data-p-details]', m).textContent = p.details;
+      qs('#btnAddDetail').onclick = ()=>{ Cart.add(p.id); openCart(); };
+      m.showModal();
+    }
+
+    function renderCatalog(list=PRODUCTS){
+      const wrap = qs('#catalog');
+      wrap.innerHTML = list.map(p=>{
+        return (
+          '<article class="group relative rounded-2xl border border-gray-200 overflow-hidden bg-white shadow-sm hover:shadow-md transition">' +
+            (p.badge? '<div class="absolute top-2 left-2 z-10 text-xs font-semibold bg-[var(--brand)] text-white px-2 py-1 rounded-full">'+p.badge+'</div>':'' ) +
+            '<button onclick="openProduct(\''+p.id+'\')" class="block w-full text-left">' +
+              '<img loading="lazy" src="'+p.image+'" alt="'+p.title+'" class="h-52 w-full object-cover"/>' +
+              '<div class="p-4">' +
+                '<h3 class="text-lg font-semibold mb-1">'+p.title+'</h3>' +
+                '<p class="text-sm text-gray-600 line-clamp-2">'+p.short+'</p>' +
+                '<div class="mt-3 flex items-center gap-2">' +
+                  '<span class="text-xl font-bold text-gray-900">'+PEN.format(p.price)+'</span>' +
+                  (p.compareAt? '<span class="text-sm line-through text-gray-400">'+PEN.format(p.compareAt)+'</span>':'' ) +
+                '</div>' +
+                '<div class="mt-2 text-xs text-amber-600">★ '+p.rating+' · Stock: '+p.stock+'</div>' +
+              '</div>' +
+            '</button>' +
+            '<div class="p-4 pt-0">' +
+              '<button onclick="Cart.add(\''+p.id+'\'); openCart();" class="w-full inline-flex items-center justify-center gap-2 rounded-xl bg-[var(--brand)] hover:bg-[var(--brandDark)] text-white py-2.5 font-semibold">Añadir al carrito</button>' +
+            '</div>' +
+          '</article>'
+        );
+      }).join('');
+    }
+
+    function renderCart(){
+      const t = calcTotals();
+      const items = t.items; const subtotal = t.subtotal; const igv = t.igv; const delivery = t.delivery; const total = t.total;
+      const list = qs('#cart-list');
+      if(!items.length){ list.innerHTML = '<div class="text-center text-gray-500 py-12">Tu carrito está vacío.</div>'; }
+      else {
+        list.innerHTML = items.map(({id, qty})=>{
+          const p = PRODUCTS.find(x=>x.id===id);
+          return (
+            '<div class="flex gap-3 py-3 border-b">' +
+              '<img src="'+p.image+'" alt="'+p.title+'" class="w-16 h-16 rounded object-cover"/>' +
+              '<div class="flex-1">' +
+                '<div class="flex justify-between gap-2">' +
+                  '<h4 class="font-semibold">'+p.title+'</h4>' +
+                  '<button class="text-gray-400 hover:text-red-600" title="Quitar" onclick="Cart.remove(\''+p.id+'\')">✕</button>' +
+                '</div>' +
+                '<div class="text-sm text-gray-600">'+PEN.format(p.price)+' c/u</div>' +
+                '<div class="mt-2 flex items-center gap-2">' +
+                  '<button class="px-2 py-1 border rounded" onclick="Cart.update(\''+p.id+'\','+(qty-1)+')">-</button>' +
+                  '<span class="w-8 text-center">'+qty+'</span>' +
+                  '<button class="px-2 py-1 border rounded" onclick="Cart.update(\''+p.id+'\','+(qty+1)+')">+</button>' +
+                '</div>' +
+              '</div>' +
+            '</div>'
+          );
+        }).join('');
+      }
+      qs('[data-subtotal]').textContent = PEN.format(subtotal);
+      qs('[data-igv]').textContent = PEN.format(igv);
+      qs('[data-delivery]').textContent = delivery ? PEN.format(delivery) : (BUSINESS.deliveryIncludedPromo? 'Incluido' : PEN.format(0));
+      qs('[data-total]').textContent = PEN.format(total);
+      const promoFlag = qs('#deliveryPromoFlag'); if(promoFlag){ promoFlag.classList.toggle('hidden', !BUSINESS.deliveryIncludedPromo); }
+    }
+
+    function applySearchSort(){
+      var sEl = document.getElementById('search');
+      var sortEl = document.getElementById('sort');
+      var q = (sEl && sEl.value ? sEl.value : '').toLowerCase().trim();
+      var sort = (sortEl && sortEl.value ? sortEl.value : '');
+      var list = PRODUCTS.filter(function(p){
+        return p.title.toLowerCase().includes(q) || p.short.toLowerCase().includes(q);
+      });
+      if(sort==='price-asc') list.sort(function(a,b){ return a.price-b.price; });
+      if(sort==='price-desc') list.sort(function(a,b){ return b.price-a.price; });
+      if(sort==='rating') list.sort(function(a,b){ return b.rating-a.rating; });
+      renderCatalog(list);
+    }
+
+    // ===== WhatsApp =====
+    function buildWhatsAppText(){
+      const t = calcTotals();
+      const items = t.items; const subtotal = t.subtotal; const igv = t.igv; const delivery = t.delivery; const total = t.total;
+      var nameEl = document.getElementById('fName');
+      var distEl = document.getElementById('fDistrict');
+      var msgEl = document.getElementById('fMsg');
+      var name = (nameEl && nameEl.value || '').trim();
+      var district = (distEl && distEl.value || '').trim();
+      var msg = (msgEl && msgEl.value || '').trim();
+
+      const header = (BUSINESS.promoTitle? BUSINESS.promoTitle+'\n' : '') + (BUSINESS.promoMessage? BUSINESS.promoMessage+'\n\n' : '');
+      let body = '';
+
+      if(items.length){
+        const lines = items.map(({id, qty})=>{
+          const p = PRODUCTS.find(x=>x.id===id);
+          const line = '• '+p.title+' x'+qty+' = '+PEN.format(p.price*qty);
+          return line;
+        }).join('\n');
+        body = 'Pedido:\n'+lines+'\n\n'+
+               'Subtotal: '+PEN.format(subtotal)+'\n'+
+               'IGV: '+PEN.format(igv)+'\n'+
+               'Delivery: '+(BUSINESS.deliveryIncludedPromo? 'Incluido' : PEN.format(delivery))+'\n'+
+               'TOTAL: '+PEN.format(total);
+      } else {
+        body = 'Hola, quiero información sobre las cámaras y la promo de hoy.';
+      }
+
+      const footer = '\n\nDatos:\nNombre: '+name+'\nDistrito: '+district+'\nMensaje: '+msg+'\nMétodo de pago: Yape/Plin/Transferencia';
+      return header + body + footer;
+    }
+
+    function checkoutWhatsApp(){
+      const text = buildWhatsAppText();
+      const url = 'https://wa.me/' + BUSINESS.phone.replace(/[^0-9]/g,'') + '?text=' + encodeURIComponent(text);
+      window.open(url, '_blank');
+    }
+
+    // ===== Inicialización =====
+    document.addEventListener('DOMContentLoaded', function(){
+      renderCatalog();
+      renderCart();
+      var s = document.getElementById('search'); if(s) s.addEventListener('input', applySearchSort);
+      var so = document.getElementById('sort'); if(so) so.addEventListener('change', applySearchSort);
+
+      // Botón flotante con promo pre-cargada
+      var float = document.getElementById('floatWA');
+      if(float){
+        var promoText = (BUSINESS.promoTitle? BUSINESS.promoTitle+': ' : '') + (BUSINESS.promoMessage || '');
+        float.href = 'https://wa.me/' + BUSINESS.phone.replace(/[^0-9]/g,'') + '?text=' + encodeURIComponent(promoText);
+      }
+
+      if(window.TEST_MODE === true){ runTests(); }
+    });
+      renderCart();
+      const s = qs('#search'); if(s) s.addEventListener('input', applySearchSort);
+      const so = qs('#sort'); if(so) so.addEventListener('change', applySearchSort);
+
+      // Botón flotante con promo pre-cargada
+      const float = qs('#floatWA');
+      if(float){
+        const promoText = (BUSINESS.promoTitle? BUSINESS.promoTitle+': ' : '') + (BUSINESS.promoMessage || '');
+        float.href = 'https://wa.me/' + BUSINESS.phone.replace(/[^0-9]/g,'') + '?text=' + encodeURIComponent(promoText);
+      }
+
+      // Tests (consola)
+      if(window.TEST_MODE === true){ runTests(); }
+    });
+
+    // ===== Tests (opcionales; no afectan producción) =====
+    window.TEST_MODE = false; // pon true para ejecutar pruebas en consola
+    function runTests(){
+      console.group('Pruebas SeguriCam');
+      Cart.clear();
+      let t1 = buildWhatsAppText();
+      console.assert(typeof t1 === 'string' && t1.length>0, 'buildWhatsAppText retorna string');
+      console.assert(t1.includes('Promo') || t1.toLowerCase().includes('promo'), 'Incluye texto de promo');
+
+      Cart.add('cam-mini-360');
+      let t2 = buildWhatsAppText();
+      console.assert(t2.includes('Pedido:'), 'Incluye encabezado Pedido cuando hay ítems');
+      console.assert(t2.includes('Cámara Wi-Fi 360° Mini'), 'Incluye nombre del producto');
+
+      Cart.update('cam-mini-360', 2);
+      let t3 = buildWhatsAppText();
+      console.assert(t3.includes('x2'), 'Refleja cantidad 2 en mensaje');
+
+      Cart.clear();
+      console.groupEnd();
+    }
+  </script>
+</head>
+<body class="bg-gray-50 text-gray-900">
+  <!-- Top Bar -->
+  <div class="bg-[var(--brand)] text-white text-sm">
+    <div class="max-w-6xl mx-auto px-4 py-2 flex items-center justify-between">
+      <p>📦 Envíos en Lima y todo el Perú</p>
+      <div class="flex items-center gap-4">
+        <span id="deliveryPromoFlag" class="font-semibold">🎁 Delivery incluido por promo</span>
+        <a href="#faq" class="underline/60 hover:underline">¿Dudas? FAQ</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Header -->
+  <header class="bg-white/90 sticky top-0 z-40 border-b">
+    <div class="max-w-6xl mx-auto px-4 py-3 flex items-center gap-4">
+      <a href="#" class="flex items-center gap-2 font-extrabold text-xl"><span class="inline-block w-7 h-7 rounded-full bg-[var(--brand)]"></span> SeguriCam Perú</a>
+      <nav class="hidden sm:flex items-center gap-6 text-sm ml-6">
+        <a href="#catalogSec" class="hover:text-[var(--brand)]">Productos</a>
+        <a href="#como-funciona" class="hover:text-[var(--brand)]">¿Cómo funciona?</a>
+        <a href="#faq" class="hover:text-[var(--brand)]">FAQ</a>
+        <a href="#contacto" class="hover:text-[var(--brand)]">Contacto</a>
+      </nav>
+      <div class="ml-auto flex items-center gap-2">
+        <div class="relative hidden sm:block">
+          <input id="search" type="search" placeholder="Buscar..." class="border rounded-xl py-2 pl-10 pr-3 w-64 focus:outline-none focus:ring-2 focus:ring-[var(--brand)]">
+          <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">🔍</span>
+        </div>
+        <select id="sort" class="border rounded-xl py-2 px-3 text-sm">
+          <option value="">Ordenar</option>
+          <option value="price-asc">Precio: menor a mayor</option>
+          <option value="price-desc">Precio: mayor a menor</option>
+          <option value="rating">Mejor calificación</option>
+        </select>
+        <button onclick="openCart()" class="relative inline-flex items-center gap-2 ml-2 rounded-xl border px-3 py-2 hover:bg-gray-100">
+          🛒 <span class="hidden sm:inline">Carrito</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero -->
+  <section class="relative overflow-hidden bg-gradient-to-b from-white to-gray-50">
+    <div class="max-w-6xl mx-auto px-4 py-14 grid md:grid-cols-2 gap-10 items-center">
+      <div>
+        <h1 class="text-4xl md:text-5xl font-extrabold leading-tight">Protege tu hogar y negocio <span class="text-[var(--brand)]">24/7</span></h1>
+        <p class="mt-4 text-gray-700 text-lg">Cámaras Wi-Fi, kits DVR y timbres inteligentes con instalación guiada y soporte. Facturamos con IGV.</p>
+        <div class="mt-6 flex flex-wrap gap-3">
+          <a href="#catalogSec" class="inline-flex items-center justify-center rounded-2xl bg-[var(--brand)] hover:bg-[var(--brandDark)] text-white px-5 py-3 font-semibold">Ver catálogo</a>
+          <button onclick="checkoutWhatsApp()" class="inline-flex items-center justify-center rounded-2xl border border-[var(--brand)] text-[var(--brand)] hover:bg-teal-50 px-5 py-3 font-semibold">Cotizar por WhatsApp</button>
+        </div>
+        <ul class="mt-6 grid grid-cols-2 gap-3 text-sm text-gray-700">
+          <li>✅ Garantía 6 a 12 meses</li>
+          <li>✅ Soporte por WhatsApp</li>
+          <li>✅ Envíos el mismo día (Lima)</li>
+          <li>✅ Pagos: Yape, Plin, Transferencia</li>
+        </ul>
+      </div>
+      <div class="relative">
+        <div class="rounded-3xl overflow-hidden shadow-xl ring-1 ring-black/5">
+          <img src="https://images.unsplash.com/photo-1585218332977-fd65fdbfb4b4?q=80&w=1200&auto=format&fit=crop" alt="Cámaras de seguridad" class="w-full h-[360px] object-cover"/>
+        </div>
+        <div class="absolute -bottom-6 -left-6 glass rounded-2xl shadow p-4 hidden md:flex gap-4 items-center">
+          <div class="text-3xl">🔒</div>
+          <div>
+            <div class="font-semibold">Monitoreo en tu celular</div>
+            <div class="text-sm text-gray-600">Recibe alertas y habla desde la app</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Catálogo -->
+  <section id="catalogSec" class="max-w-6xl mx-auto px-4 py-12">
+    <div class="flex items-end justify-between mb-6">
+      <div>
+        <h2 class="text-2xl md:text-3xl font-bold">Catálogo</h2>
+        <p class="text-gray-600">Elige tu opción ideal. Los precios mostrarán IGV en el resumen.</p>
+      </div>
+      <a href="#faq" class="text-sm text-[var(--brand)] hover:underline">¿Cuál me conviene?</a>
+    </div>
+    <div id="catalog" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+  </section>
+
+  <!-- Cómo funciona -->
+  <section id="como-funciona" class="bg-white border-t">
+    <div class="max-w-6xl mx-auto px-4 py-12 grid md:grid-cols-4 gap-6">
+      <div class="p-6 rounded-2xl border bg-gray-50"><div class="text-3xl">🛒</div><h3 class="font-bold mt-2">1. Elige</h3><p class="text-sm text-gray-600">Añade productos al carrito y cotiza en un clic.</p></div>
+      <div class="p-6 rounded-2xl border bg-gray-50"><div class="text-3xl">💬</div><h3 class="font-bold mt-2">2. Confirma</h3><p class="text-sm text-gray-600">Coordinamos por WhatsApp entrega e instalación.</p></div>
+      <div class="p-6 rounded-2xl border bg-gray-50"><div class="text-3xl">🚚</div><h3 class="font-bold mt-2">3. Recibe</h3><p class="text-sm text-gray-600">Delivery en Lima o envío nacional.</p></div>
+      <div class="p-6 rounded-2xl border bg-gray-50"><div class="text-3xl">📱</div><h3 class="font-bold mt-2">4. Monitorea</h3><p class="text-sm text-gray-600">Instala la app y mira en tiempo real.</p></div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section id="faq" class="max-w-6xl mx-auto px-4 py-12">
+    <h2 class="text-2xl md:text-3xl font-bold mb-6">Preguntas frecuentes</h2>
+    <div class="grid md:grid-cols-2 gap-6">
+      <details class="p-5 bg-white rounded-2xl border" open>
+        <summary class="font-semibold cursor-pointer">¿Incluye instalación?</summary>
+        <p class="mt-3 text-sm text-gray-700">Guía por WhatsApp sin costo y visitas técnicas a pedido (costo adicional en Lima). Para kits DVR recomendamos técnico.</p>
+      </details>
+      <details class="p-5 bg-white rounded-2xl border">
+        <summary class="font-semibold cursor-pointer">¿Necesito internet?</summary>
+        <p class="mt-3 text-sm text-gray-700">Las cámaras Wi-Fi requieren red 2.4 GHz. Los kits DVR pueden verse por internet si conectas el DVR al router.</p>
+      </details>
+      <details class="p-5 bg-white rounded-2xl border">
+        <summary class="font-semibold cursor-pointer">¿Métodos de pago?</summary>
+        <p class="mt-3 text-sm text-gray-700">Yape, Plin y transferencia bancaria. Consultar por contraentrega en Lima.</p>
+      </details>
+      <details class="p-5 bg-white rounded-2xl border">
+        <summary class="font-semibold cursor-pointer">¿Garantía?</summary>
+        <p class="mt-3 text-sm text-gray-700">Garantía por defectos de fábrica de 6 a 12 meses.</p>
+      </details>
+    </div>
+  </section>
+
+  <!-- Contacto -->
+  <section id="contacto" class="bg-white border-t">
+    <div class="max-w-6xl mx-auto px-4 py-12 grid md:grid-cols-2 gap-8 items-center">
+      <div>
+        <h2 class="text-2xl md:text-3xl font-bold">¿Necesitas asesoría?</h2>
+        <p class="text-gray-700 mt-2">Cuéntanos tu caso: hogar, departamento, tienda o almacén. Te recomendamos el equipo ideal.</p>
+        <div class="mt-4 flex gap-3">
+          <button onclick="checkoutWhatsApp()" class="inline-flex items-center justify-center rounded-2xl bg-[#25D366] hover:brightness-95 text-white px-5 py-3 font-semibold">Escribir por WhatsApp</button>
+          <a href="#catalogSec" class="inline-flex items-center justify-center rounded-2xl border px-5 py-3 font-semibold">Ver catálogo</a>
+        </div>
+      </div>
+      <form onsubmit="event.preventDefault(); checkoutWhatsApp();" class="bg-gray-50 p-6 rounded-2xl border">
+        <div class="grid sm:grid-cols-2 gap-4">
+          <div>
+            <label class="text-sm text-gray-600">Nombre</label>
+            <input id="fName" name="name" required class="w-full mt-1 border rounded-xl px-3 py-2" placeholder="Tu nombre" />
+          </div>
+          <div>
+            <label class="text-sm text-gray-600">Distrito</label>
+            <input id="fDistrict" name="district" class="w-full mt-1 border rounded-xl px-3 py-2" placeholder="Ej. Miraflores" />
+          </div>
+          <div class="sm:col-span-2">
+            <label class="text-sm text-gray-600">Mensaje</label>
+            <textarea id="fMsg" name="message" class="w-full mt-1 border rounded-xl px-3 py-2" rows="3" placeholder="Cuéntanos qué necesitas asegurar..."></textarea>
+          </div>
+        </div>
+        <button class="mt-4 w-full rounded-2xl bg-[var(--brand)] hover:bg-[var(--brandDark)] text-white py-3 font-semibold">Enviar por WhatsApp</button>
+      </form>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-gray-900 text-gray-200">
+    <div class="max-w-6xl mx-auto px-4 py-10 grid md:grid-cols-4 gap-8">
+      <div>
+        <div class="font-extrabold text-xl">SeguriCam Perú</div>
+        <p class="text-sm text-gray-400 mt-2">Protegemos lo que más importa. Lima, Perú.</p>
+      </div>
+      <div>
+        <div class="font-semibold">Ayuda</div>
+        <ul class="mt-2 space-y-1 text-sm text-gray-400">
+          <li><a href="#faq" class="hover:text-white">FAQ</a></li>
+          <li><a href="#contacto" class="hover:text-white">Contacto</a></li>
+          <li><a href="#como-funciona" class="hover:text-white">Cómo comprar</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="font-semibold">Legal</div>
+        <ul class="mt-2 space-y-1 text-sm text-gray-400">
+          <li>Precios en PEN (S/)</li>
+          <li>Incluye IGV al pagar</li>
+          <li>Garantía por fabricante</li>
+        </ul>
+      </div>
+      <div>
+        <div class="font-semibold">WhatsApp</div>
+        <p class="text-sm text-gray-400 mt-2">+51 954 118 198</p>
+        <button onclick="checkoutWhatsApp()" class="mt-3 inline-flex items-center rounded-xl bg-[#25D366] text-white px-4 py-2 font-semibold">Chatear ahora</button>
+      </div>
+    </div>
+    <div class="border-t border-white/10">
+      <div class="max-w-6xl mx-auto px-4 py-4 text-xs text-gray-400">© <span id="y"></span> SeguriCam Perú — Hecho con TailwindCSS</div>
+    </div>
+  </footer>
+
+  <!-- Carrito Drawer -->
+  <div class="fixed inset-0 z-50 pointer-events-none" aria-hidden="true">
+    <div class="absolute inset-0 bg-black/40 opacity-0 transition-opacity duration-300 pointer-events-auto" onclick="closeCart()" id="cart-backdrop"></div>
+    <aside class="absolute right-0 top-0 h-full w-full max-w-md bg-white shadow-2xl translate-x-full transition-transform duration-300 pointer-events-auto" id="cart-panel">
+      <div class="p-4 border-b flex items-center justify-between">
+        <h3 class="text-lg font-semibold">Tu carrito</h3>
+        <button onclick="closeCart()" class="text-gray-500 hover:text-black">✕</button>
+      </div>
+      <div id="cart-list" class="p-4 overflow-y-auto max-h-[60vh]"></div>
+      <div class="p-4 border-t space-y-2">
+        <div class="flex justify-between text-sm"><span>Subtotal</span><span data-subtotal></span></div>
+        <div class="flex justify-between text-sm"><span>IGV (18%)</span><span data-igv></span></div>
+        <div class="flex justify-between text-sm"><span>Delivery</span><span data-delivery></span></div>
+        <div class="flex justify-between font-semibold text-lg pt-2"><span>Total</span><span data-total></span></div>
+        <button onclick="checkoutWhatsApp()" class="w-full mt-2 rounded-xl bg-[var(--brand)] hover:bg-[var(--brandDark)] text-white py-3 font-semibold">Finalizar por WhatsApp</button>
+        <button onclick="Cart.clear()" class="w-full mt-2 rounded-xl border py-3 font-semibold">Vaciar carrito</button>
+      </div>
+    </aside>
+  </div>
+
+  <!-- Producto Modal -->
+  <dialog id="product-modal" class="rounded-2xl p-0 w-full max-w-2xl backdrop:bg-black/40">
+    <div class="grid md:grid-cols-2">
+      <img data-p-img src="" alt="Producto" class="w-full h-64 md:h-full object-cover"/>
+      <div class="p-6 space-y-2">
+        <div class="text-xs text-[var(--brand)] font-bold" data-p-badge></div>
+        <h3 class="text-2xl font-bold" data-p-title></h3>
+        <div class="flex items-center gap-3">
+          <div class="text-2xl font-extrabold" data-p-price></div>
+          <div class="text-sm line-through text-gray-400" data-p-compare></div>
+        </div>
+        <p class="text-gray-700" data-p-short></p>
+        <p class="text-sm text-gray-600" data-p-details></p>
+        <div class="pt-4 flex gap-3">
+          <button id="btnAddDetail" class="flex-1 rounded-xl bg-[var(--brand)] hover:bg-[var(--brandDark)] text-white py-3 font-semibold">Añadir al carrito</button>
+          <form method="dialog"><button class="px-4 rounded-xl border font-semibold">Cerrar</button></form>
+        </div>
+      </div>
+    </div>
+  </dialog>
+
+  <!-- Botón flotante WhatsApp -->
+  <a id="floatWA" target="_blank" class="fixed bottom-5 right-5 z-40 inline-flex items-center gap-2 rounded-full shadow-lg px-4 py-3 bg-[#25D366] text-white font-semibold hover:brightness-95">WhatsApp 💬</a>
+
+  <script>
+    // Drawer transitions + año en footer
+    (function(){
+      const panel = document.getElementById('cart-panel');
+      const bd = document.getElementById('cart-backdrop');
+      const ro = new MutationObserver(()=>{
+        const open = document.documentElement.classList.contains('cart-open');
+        panel.style.transform = open ? 'translateX(0)' : 'translateX(100%)';
+        bd.style.opacity = open ? '1' : '0';
+        bd.style.pointerEvents = open ? 'auto' : 'none';
+      });
+      ro.observe(document.documentElement,{ attributes:true });
+      const y = document.getElementById('y'); if(y) y.textContent = new Date().getFullYear();
+    })();
+  </script>
+  <!-- Simple error overlay (debug) -->
+  <div id="errOverlay" style="position:fixed;left:0;right:0;bottom:0;background:#fee2e2;color:#991b1b;padding:8px 12px;font:12px/1.4 system-ui, -apple-system, Segoe UI, Roboto, Helvetica;display:none;z-index:9999"></div>
+  <script>
+    // Muestra errores JS en pantalla para facilitar debugging en VSCode
+    window.addEventListener('error', function(e){
+      var box = document.getElementById('errOverlay');
+      if(!box) return;
+      box.style.display='block';
+      box.textContent = 'Error: ' + (e.message || 'unknown') + (e.filename? ' — ' + e.filename : '') + (e.lineno? ' @'+e.lineno+':'+e.colno : '');
+      console.error(e.error || e.message);
+    });
+  </script>
+</body>
+</html>
