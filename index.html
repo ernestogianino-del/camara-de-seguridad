@@ -3,557 +3,510 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <title>Vigilante | Cámaras de seguridad — Importamos cámaras de seguridad</title>
-  <meta name="description" content="Vigilante: cámaras de seguridad — importamos cámaras de seguridad. Compra cámaras Wi‑Fi, kits DVR y timbres inteligentes. Envíos en Lima y todo el Perú. Pagos Yape/Plin/Transferencia" />
+  <title>web - prueba 2 · Nueva propuesta | Cámaras de seguridad en Lima</title>
+  <meta name="description" content="Nueva propuesta visual: tienda de cámaras de seguridad en Lima. Checkout por WhatsApp, carrito en hoja inferior, mobile-first." />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
-    :root{ --brand:#00a884; --brandDark:#00866d; }
-    html{ scroll-behavior:smooth }
-    body{ font-family:'Inter',system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,'Apple Color Emoji','Segoe UI Emoji'; }
-    .glass{ backdrop-filter:saturate(180%) blur(8px); background:rgba(255,255,255,.78) }
-    button{ cursor:pointer }
-    /* Safe areas para iPhone con notch */
-    .safe-container{ padding-left:max(1rem, env(safe-area-inset-left)); padding-right:max(1rem, env(safe-area-inset-right)); }
-    .safe-fab{ right:max(1.25rem, env(safe-area-inset-right)); bottom:max(1.25rem, env(safe-area-inset-bottom)); }
-  /* Mobile compact header fixes */
-    @media (max-width: 380px){
-      #btnOpenCart span{ display:none; }
-      #btnOpenCart{ padding-inline: .5rem; }
-      header .text-xl{ font-size:1.05rem; }
+    :root{
+      --bg:#0b1220;   /* navy profundo */
+      --bg2:#0f172a;  /* slate-900 */
+      --card:#101826; /* carta oscura */
+      --stroke:rgba(255,255,255,.08);
+      --text:#E5E7EB; /* slate-200 */
+      --muted:#9CA3AF;/* slate-400 */
+      --accent:#00E59A; /* verde neón */
+      --accent2:#60A5FA;/* azul brillo */
+      --accent-dark:#00b67a;
     }
+    html{ scroll-behavior:smooth }
+    body{ font-family:'Poppins',system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial; background:
+      radial-gradient(1200px 600px at 80% -10%, rgba(96,165,250,.18), transparent 60%),
+      radial-gradient(1000px 600px at 0% -10%, rgba(0,229,154,.18), transparent 60%),
+      linear-gradient(180deg, var(--bg), var(--bg2));
+      color:var(--text);
+    }
+    .glass{ background:rgba(16,24,38,.7); backdrop-filter: blur(8px); }
+    .btn-pri{ background:linear-gradient(90deg, var(--accent), var(--accent2)); color:#041014; }
+    .btn-pri:hover{ filter:brightness(1.05) } 
+    .btn-sec{ border:1px solid var(--stroke); color:var(--text) }
+    .chip{ border:1px solid var(--stroke); color:var(--muted); }
+    .chip.active{ border-color:var(--accent); color:var(--accent); background:rgba(0,229,154,.08) }
+    .card{ background:var(--card); border:1px solid var(--stroke) }
+    .price{ color:white }
+    .safe-bottom{ padding-bottom: max(14px, env(safe-area-inset-bottom)); }
+    @media (max-width:380px){ #logo { font-size:1rem } }
   </style>
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath fill='%2300a884' d='M16 2a14 14 0 100 28 14 14 0 000-28zm6.8 10.2l-4.7 2.7a3 3 0 00-1.4 1.9l-1 5a.7.7 0 01-1.3.1l-2.2-4.6-4.7-1.4a.7.7 0 01-.1-1.3l5-1a3 3 0 001.9-1.4l2.7-4.7a.7.7 0 011.2 0l1.9 3.3 3.3 1.9a.7.7 0 010 1.3z'/%3E%3C/svg%3E" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='14' fill='%2300E59A'/%3E%3Cpath d='M11 17l3 3 7-7' stroke='%23041014' stroke-width='3' fill='none' stroke-linecap='round'/%3E%3C/svg%3E"/>
 
   <script>
-    // ===== Configuración =====
+    // ============ CONFIG ============
     const BUSINESS = {
-      name: 'Vigilante',
-      phone: '+51954118198', // WhatsApp (Perú)
+      name: 'web - prueba 2',
+      phone: '+51954118198',
       igv: 0.18,
       deliveryFlat: 10,
-      deliveryIncludedPromo: true, // Delivery incluido por promo
-      promoTitle: 'Promo de lanzamiento',
-      promoMessage: 'Hoy: delivery GRATIS en Lima + 10% OFF con el código SEGURI10 (hasta 11:59 p.m.)'
+      deliveryIncludedPromo: true,
+      promoTitle: 'Promo Lima',
+      promoMessage: 'Delivery GRATIS + 10% OFF con código SEGURI10 (hoy)'
     };
 
-    // ===== Catálogo =====
     const PRODUCTS = [
-      { id:'cam-mini-360', title:'Cámara Wi‑Fi 360° Mini', price:159, compareAt:199, badge:'Más vendida', rating:4.7, stock:42, short:'Visión 360°, audio 2 vías, detección de movimiento.', details:'Conéctala a tu red 2.4 GHz y monitorea desde tu celular. Base magnética, visión nocturna y grabación microSD.', image:'https://images.unsplash.com/photo-1582744748899-278fd10b0716?q=80&w=1200&auto=format&fit=crop' },
-      { id:'kit-dvr-4', title:'Kit DVR 4 Cámaras 1080p', price:520, compareAt:599, badge:'Pack ahorro', rating:4.6, stock:12, short:'4 cámaras + DVR 4ch, acceso remoto, listo para instalar.', details:'Incluye cables, fuente, mouse y app móvil. Ideal para negocios y casas. Soporta disco duro (no incluido).', image:'https://images.unsplash.com/photo-1595686823819-3dd8d1f409e2?q=80&w=1200&auto=format&fit=crop' },
-      { id:'timbre-smart', title:'Timbre Inteligente con Cámara', price:159, compareAt:189, badge:'Nuevo', rating:4.5, stock:28, short:'Notificaciones al móvil, visión nocturna, batería recargable.', details:'Atiende desde cualquier lugar. Detección de movimiento y grabación en nube u opción microSD.', image:'https://images.unsplash.com/photo-1518432031352-d6fc5c10da5a?q=80&w=1200&auto=format&fit=crop' }
+      { id:'cam-mini-360', title:'Cámara Wi‑Fi 360° Mini', price:159, compareAt:199, badge:'Más vendida', rating:4.7, stock:42, type:'wifi',
+        short:'Visión 360°, audio 2 vías, detección de movimiento.',
+        details:'Conéctala a 2.4 GHz. Visión nocturna, base magnética, microSD.',
+        image:'https://images.unsplash.com/photo-1582744748899-278fd10b0716?q=80&w=1200&auto=format&fit=crop' },
+      { id:'kit-dvr-4', title:'Kit DVR 4 Cámaras 1080p', price:520, compareAt:599, badge:'Pack ahorro', rating:4.6, stock:12, type:'kit',
+        short:'4 cámaras + DVR 4ch, acceso remoto, listo para instalar.',
+        details:'Incluye cables, fuente y app móvil. Requiere HDD (opcional).',
+        image:'https://images.unsplash.com/photo-1595686823819-3dd8d1f409e2?q=80&w=1200&auto=format&fit=crop' },
+      { id:'timbre-smart', title:'Timbre Inteligente con Cámara', price:159, compareAt:189, badge:'Nuevo', rating:4.5, stock:28, type:'timbre',
+        short:'Notificaciones al móvil, visión nocturna, batería recargable.',
+        details:'Atiende desde cualquier lugar. Detección de movimiento.',
+        image:'https://images.unsplash.com/photo-1518432031352-d6fc5c10da5a?q=80&w=1200&auto=format&fit=crop' },
+      { id:'cam-exterior-bullet', title:'Cámara Exterior Bullet 1080p', price:189, compareAt:229, badge:'Exterior', rating:4.6, stock:17, type:'exterior',
+        short:'IP66, visión nocturna, apta para intemperie.',
+        details:'Cableada/Wi‑Fi según modelo, soporte metálico.',
+        image:'https://images.unsplash.com/photo-1543466835-00a7907e9de1?q=80&w=1200&auto=format&fit=crop' }
     ];
 
-    // ===== Utilidades =====
-    const PEN = new Intl.NumberFormat('es-PE', { style:'currency', currency:'PEN', maximumFractionDigits:2 });
-    const qs = (s, el=document) => el.querySelector(s);
+    // ============ UTIL ============
+    const PEN = new Intl.NumberFormat('es-PE',{ style:'currency', currency:'PEN', maximumFractionDigits:2 });
+    function $(id){ return document.getElementById(id); }
+    function qs(s, el=document){ return el.querySelector(s); }
 
-    // ===== Carrito (localStorage) =====
-    // Definimos globales por seguridad
+    // ============ CARRITO ============
     window.openCart  = function(){ document.documentElement.classList.add('cart-open'); };
     window.closeCart = function(){ document.documentElement.classList.remove('cart-open'); };
 
     const Cart = {
-      key: 'seguricam_cart_v1',
-      get(){ try { return JSON.parse(localStorage.getItem(this.key)) || []; } catch { return []; } },
+      key:'cart_web_prueba2_new',
+      get(){ try { return JSON.parse(localStorage.getItem(this.key))||[] } catch { return [] } },
       set(items){ localStorage.setItem(this.key, JSON.stringify(items)); renderCart(); },
-      add(id){ const items = this.get(); const i = items.findIndex(x=>x.id===id); if(i>-1){ items[i].qty++; } else { items.push({id, qty:1}); } this.set(items); },
+      add(id){ const items=this.get(); const i=items.findIndex(x=>x.id===id); if(i>-1) items[i].qty++; else items.push({id,qty:1}); this.set(items); },
       remove(id){ this.set(this.get().filter(x=>x.id!==id)); },
-      update(id, qty){ const items = this.get(); const it = items.find(x=>x.id===id); if(!it) return; it.qty = Math.max(1, qty|0); this.set(items); },
+      update(id, qty){ const items=this.get(); const it=items.find(x=>x.id===id); if(!it) return; it.qty=Math.max(1, qty|0); this.set(items); },
       clear(){ this.set([]); }
     };
 
     function calcTotals(){
       const items = Cart.get();
-      let subtotal = 0;
-      items.forEach(({id, qty})=>{ const p = PRODUCTS.find(x=>x.id===id); subtotal += (p? p.price:0) * qty; });
-      const igv = +(subtotal * BUSINESS.igv).toFixed(2);
-      const delivery = BUSINESS.deliveryIncludedPromo ? 0 : (items.length ? BUSINESS.deliveryFlat : 0);
-      const total = subtotal + igv + delivery;
-      return { items, subtotal, igv, delivery, total };
+      let subtotal=0; items.forEach(({id,qty})=>{ const p=PRODUCTS.find(x=>x.id===id); subtotal += (p?p.price:0)*qty });
+      const igv=+(subtotal*BUSINESS.igv).toFixed(2);
+      const delivery=BUSINESS.deliveryIncludedPromo ? 0 : (items.length? BUSINESS.deliveryFlat:0);
+      const total=subtotal+igv+delivery; return {items,subtotal,igv,delivery,total};
     }
 
-    function openProduct(id){
-      const p = PRODUCTS.find(x=>x.id===id); if(!p) return;
-      const m = qs('#product-modal');
-      qs('[data-p-img]', m).src = p.image;
-      qs('[data-p-title]', m).textContent = p.title;
-      qs('[data-p-badge]', m).textContent = p.badge || '';
-      qs('[data-p-price]', m).textContent = PEN.format(p.price);
-      qs('[data-p-compare]', m).textContent = p.compareAt ? PEN.format(p.compareAt) : '';
-      qs('[data-p-short]', m).textContent = p.short;
-      qs('[data-p-details]', m).textContent = p.details;
-      qs('#btnAddDetail').onclick = ()=>{ Cart.add(p.id); window.openCart(); };
-      m.showModal();
-    }
-
-    function renderCatalog(list=PRODUCTS){
-      const wrap = qs('#catalog');
-      wrap.innerHTML = list.map(p=>{
+    // ============ RENDER ============
+    function renderCatalog(list){
+      const L = list||PRODUCTS;
+      const wrap = $('catalog');
+      wrap.innerHTML = L.map(p=>{
         return (
-          '<article class="group relative rounded-2xl border border-gray-200 overflow-hidden bg-white shadow-sm hover:shadow-md transition">' +
-            (p.badge? '<div class="absolute top-2 left-2 z-10 text-xs font-semibold bg-[var(--brand)] text-white px-2 py-1 rounded-full">'+p.badge+'</div>':'' ) +
-            '<button type="button" data-action="open" data-id="'+p.id+'" class="block w-full text-left js-open-product">' +
-              '<img loading="lazy" src="'+p.image+'" alt="'+p.title+'" class="h-52 w-full object-cover"/>' +
-              '<div class="p-4">' +
-                '<h3 class="text-lg font-semibold mb-1">'+p.title+'</h3>' +
-                '<p class="text-sm text-gray-600">'+p.short+'</p>' +
-                '<div class="mt-3 flex items-center gap-2">' +
-                  '<span class="text-xl font-bold text-gray-900">'+PEN.format(p.price)+'</span>' +
-                  (p.compareAt? '<span class="text-sm line-through text-gray-400">'+PEN.format(p.compareAt)+'</span>':'' ) +
-                '</div>' +
-                '<div class="mt-2 text-xs text-amber-600">★ '+p.rating+' · Stock: '+p.stock+'</div>' +
-              '</div>' +
-            '</button>' +
-            '<div class="p-4 pt-0">' +
-              '<button type="button" data-action="add" data-id="'+p.id+'" class="w-full inline-flex items-center justify-center gap-2 rounded-xl bg-[var(--brand)] hover:bg-[var(--brandDark)] text-white py-2.5 font-semibold js-add-cart">Añadir al carrito</button>' +
-            '</div>' +
+          '<article class="card rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition">'+
+            (p.badge? '<div class="absolute m-3 text-xs font-semibold text-black bg-[var(--accent)] px-2 py-1 rounded-full">'+p.badge+'</div>':'' )+
+            '<button type="button" class="block w-full text-left js-open-product" data-id="'+p.id+'">'+
+              '<img loading="lazy" src="'+p.image+'" alt="'+p.title+'" class="h-52 w-full object-cover"/>'+
+              '<div class="p-4">'+
+                '<h3 class="text-lg font-semibold mb-1">'+p.title+'</h3>'+
+                '<p class="text-sm" style="color:var(--muted)">'+p.short+'</p>'+
+                '<div class="mt-3 flex items-center gap-2">'+
+                  '<span class="text-xl font-extrabold price">'+PEN.format(p.price)+'</span>'+
+                  (p.compareAt? '<span class="text-sm line-through" style="color:var(--muted)">'+PEN.format(p.compareAt)+'</span>':'' )+
+                '</div>'+
+                '<div class="mt-2 text-xs" style="color:var(--accent)">★ '+p.rating+' · Stock: '+p.stock+'</div>'+
+              '</div>'+
+            '</button>'+
+            '<div class="p-4 pt-0">'+
+              '<button type="button" class="w-full inline-flex items-center justify-center gap-2 rounded-xl btn-pri py-2.5 font-semibold js-add-cart" data-id="'+p.id+'">➕ Añadir</button>'+
+            '</div>'+
           '</article>'
         );
       }).join('');
     }
 
     function renderCart(){
-      const t = calcTotals();
-      const items = t.items; const subtotal = t.subtotal; const igv = t.igv; const delivery = t.delivery; const total = t.total;
-      const list = qs('#cart-list');
-      if(!items.length){ list.innerHTML = '<div class="text-center text-gray-500 py-12">Tu carrito está vacío.</div>'; }
-      else {
-        list.innerHTML = items.map(({id, qty})=>{
-          const p = PRODUCTS.find(x=>x.id===id);
+      const t=calcTotals(); const {items,subtotal,igv,delivery,total}=t; const list=$('cart-list');
+      if(!items.length){ list.innerHTML='<div class="text-center text-slate-400 py-12">Tu carrito está vacío.</div>'; }
+      else{
+        list.innerHTML = items.map(({id,qty})=>{
+          const p=PRODUCTS.find(x=>x.id===id);
           return (
-            '<div class="flex gap-3 py-3 border-b">' +
-              '<img src="'+p.image+'" alt="'+p.title+'" class="w-16 h-16 rounded object-cover"/>' +
-              '<div class="flex-1">' +
-                '<div class="flex justify-between gap-2">' +
-                  '<h4 class="font-semibold">'+p.title+'</h4>' +
-                  '<button type="button" class="text-gray-400 hover:text-red-600" title="Quitar" data-action="rem" data-id="'+p.id+'">✕</button>' +
-                '</div>' +
-                '<div class="text-sm text-gray-600">'+PEN.format(p.price)+' c/u</div>' +
-                '<div class="mt-2 flex items-center gap-2">' +
-                  '<button type="button" class="px-2 py-1 border rounded" data-action="dec" data-id="'+p.id+'">-</button>' +
-                  '<span class="w-8 text-center">'+qty+'</span>' +
-                  '<button type="button" class="px-2 py-1 border rounded" data-action="inc" data-id="'+p.id+'">+</button>' +
-                '</div>' +
-              '</div>' +
+            '<div class="flex gap-3 py-3 border-b border-white/10">'+
+              '<img src="'+p.image+'" alt="'+p.title+'" class="w-16 h-16 rounded object-cover"/>'+
+              '<div class="flex-1">'+
+                '<div class="flex justify-between gap-2">'+
+                  '<h4 class="font-semibold">'+p.title+'</h4>'+
+                  '<button type="button" class="text-slate-400 hover:text-red-400" title="Quitar" data-action="rem" data-id="'+p.id+'">✕</button>'+
+                '</div>'+
+                '<div class="text-sm text-slate-400">'+PEN.format(p.price)+' c/u</div>'+
+                '<div class="mt-2 flex items-center gap-2">'+
+                  '<button type="button" class="px-2 py-1 border border-white/10 rounded" data-action="dec" data-id="'+p.id+'">−</button>'+
+                  '<span class="w-8 text-center">'+qty+'</span>'+
+                  '<button type="button" class="px-2 py-1 border border-white/10 rounded" data-action="inc" data-id="'+p.id+'">＋</button>'+
+                '</div>'+
+              '</div>'+
             '</div>'
           );
         }).join('');
       }
-      qs('[data-subtotal]').textContent = PEN.format(subtotal);
-      qs('[data-igv]').textContent = PEN.format(igv);
-      qs('[data-delivery]').textContent = delivery ? PEN.format(delivery) : (BUSINESS.deliveryIncludedPromo? 'Incluido' : PEN.format(0));
-      qs('[data-total]').textContent = PEN.format(total);
-      const promoFlag = qs('#deliveryPromoFlag'); if(promoFlag){ promoFlag.classList.toggle('hidden', !BUSINESS.deliveryIncludedPromo); }
+      qs('[data-subtotal]').textContent=PEN.format(subtotal);
+      qs('[data-igv]').textContent=PEN.format(igv);
+      qs('[data-delivery]').textContent= delivery? PEN.format(delivery) : (BUSINESS.deliveryIncludedPromo? 'Incluido' : PEN.format(0));
+      qs('[data-total]').textContent=PEN.format(total);
     }
 
-    function applySearchSort(){
-      const sEl = document.getElementById('search');
-      const sortEl = document.getElementById('sort');
-      const q = (sEl && sEl.value ? sEl.value : '').toLowerCase().trim();
-      const sort = (sortEl && sortEl.value ? sortEl.value : '');
+    // ============ FILTROS ============
+    function applyFilters(){
+      const q = ($('search') && $('search').value || '').toLowerCase().trim();
+      const activeChip = qs('.chip.active');
+      const type = activeChip ? activeChip.getAttribute('data-type') : '';
       let list = PRODUCTS.filter(p=> p.title.toLowerCase().includes(q) || p.short.toLowerCase().includes(q));
+      if(type && type!=='all'){ list = list.filter(p=>p.type===type); }
+      const sortEl = $('sort'); const sort = sortEl? sortEl.value : '';
       if(sort==='price-asc') list.sort((a,b)=>a.price-b.price);
       if(sort==='price-desc') list.sort((a,b)=>b.price-a.price);
       if(sort==='rating') list.sort((a,b)=>b.rating-a.rating);
       renderCatalog(list);
     }
 
-    // ===== WhatsApp =====
+    // ============ WHATSAPP ============
     function buildWhatsAppText(){
-      const t = calcTotals();
-      const { items, subtotal, igv, delivery, total } = t;
-      const name = (document.getElementById('fName')?.value || '').trim();
-      const district = (document.getElementById('fDistrict')?.value || '').trim();
-      const msg = (document.getElementById('fMsg')?.value || '').trim();
-
-      const header = (BUSINESS.promoTitle? BUSINESS.promoTitle+'\n' : '') + (BUSINESS.promoMessage? BUSINESS.promoMessage+'\n\n' : '');
-      let body = '';
-
+      const t=calcTotals(); const {items,subtotal,igv,delivery,total}=t;
+      const nameEl=$('fName'), distEl=$('fDistrict'), msgEl=$('fMsg');
+      const name=(nameEl&&nameEl.value||'').trim();
+      const district=(distEl&&distEl.value||'').trim();
+      const msg=(msgEl&&msgEl.value||'').trim();
+      const header=(BUSINESS.promoTitle? BUSINESS.promoTitle+'\n':'' ) + (BUSINESS.promoMessage? BUSINESS.promoMessage+'\n\n':'' );
+      let body='';
       if(items.length){
-        const lines = items.map(({id, qty})=>{
-          const p = PRODUCTS.find(x=>x.id===id);
-          return '• '+p.title+' x'+qty+' = '+PEN.format(p.price*qty);
-        }).join('\n');
+        const lines = items.map(({id,qty})=>{ const p=PRODUCTS.find(x=>x.id===id); return '• '+p.title+' x'+qty+' = '+PEN.format(p.price*qty); }).join('\n');
         body = 'Pedido:\n'+lines+'\n\n'+
                'Subtotal: '+PEN.format(subtotal)+'\n'+
                'IGV: '+PEN.format(igv)+'\n'+
                'Delivery: '+(BUSINESS.deliveryIncludedPromo? 'Incluido' : PEN.format(delivery))+'\n'+
                'TOTAL: '+PEN.format(total);
-      } else {
-        body = 'Hola, quiero información sobre las cámaras y la promo de hoy.';
-      }
-
-      const footer = '\n\nDatos:\nNombre: '+name+'\nDistrito: '+district+'\nMensaje: '+msg+'\nMétodo de pago: Yape/Plin/Transferencia';
-      return header + body + footer;
+      } else { body='Hola, quiero información sobre las cámaras y la promo de hoy.'; }
+      const footer='\n\nDatos:\nNombre: '+name+'\nDistrito: '+district+'\nMensaje: '+msg;
+      return header+body+footer;
     }
-
     function checkoutWhatsApp(){
-      const text = buildWhatsAppText();
-      const url = 'https://wa.me/' + BUSINESS.phone.replace(/[^0-9]/g,'') + '?text=' + encodeURIComponent(text);
-      window.open(url, '_blank');
+      const url='https://wa.me/'+BUSINESS.phone.replace(/[^0-9]/g,'')+'?text='+encodeURIComponent(buildWhatsAppText());
+      window.open(url,'_blank');
     }
 
-    // ===== Inicialización (sin inline handlers) =====
-    document.addEventListener('DOMContentLoaded', ()=>{
-      renderCatalog();
-      renderCart();
+    // ============ INIT ============
+    document.addEventListener('DOMContentLoaded', function(){
+      renderCatalog(); renderCart();
 
-      // Enlaces de UI
-      const $ = s=>document.getElementById(s);
-      $('btnOpenCart')?.addEventListener('click', window.openCart);
-      $('btnCloseCart')?.addEventListener('click', window.closeCart);
-      $('cart-backdrop')?.addEventListener('click', window.closeCart);
-      $('btnCheckout')?.addEventListener('click', checkoutWhatsApp);
-      $('btnClearCart')?.addEventListener('click', ()=>Cart.clear());
-      $('btnHeroWA')?.addEventListener('click', checkoutWhatsApp);
-      $('btnContactWA')?.addEventListener('click', checkoutWhatsApp);
-      $('btnCheckoutForm')?.addEventListener('click', checkoutWhatsApp);
-      $('btnFooterWA')?.addEventListener('click', checkoutWhatsApp);
+      // Chips categorías
+      const chipWrap = $('chips');
+      if(chipWrap){ chipWrap.addEventListener('click', function(e){ const c=e.target.closest('.chip'); if(!c) return; qs('.chip.active')?.classList.remove('active'); c.classList.add('active'); applyFilters(); }); }
 
-      // Buscar/ordenar
-      $('search')?.addEventListener('input', applySearchSort);
-      $('sort')?.addEventListener('change', applySearchSort);
+      // Buscador y sort
+      $('search') && $('search').addEventListener('input', applyFilters);
+      $('sort') && $('sort').addEventListener('change', applyFilters);
 
-      // Delegación en catálogo y carrito
-      const cat = $('catalog');
+      // Delegación Catálogo
+      const cat=$('catalog');
       if(cat){
-        cat.addEventListener('click', (e)=>{
-          const t = e.target.closest('[data-action]');
-          if(!t) return;
-          const action = t.getAttribute('data-action');
-          const id = t.getAttribute('data-id');
-          if(action==='open'){ openProduct(id); }
-          if(action==='add'){ Cart.add(id); window.openCart(); }
+        cat.addEventListener('click', function(e){
+          const openBtn=e.target.closest('.js-open-product');
+          const addBtn=e.target.closest('.js-add-cart');
+          if(openBtn){ openProduct(openBtn.getAttribute('data-id')); }
+          if(addBtn){ Cart.add(addBtn.getAttribute('data-id')); openCart(); }
         });
       }
 
-      const cartList = $('cart-list');
-      if(cartList){
-        cartList.addEventListener('click', (e)=>{
-          const t = e.target.closest('[data-action]');
-          if(!t) return;
-          const act = t.getAttribute('data-action');
-          const id = t.getAttribute('data-id');
-          if(act==='inc'){ Cart.add(id); }
-          if(act==='dec'){
-            const items = Cart.get();
-            const it = items.find(x=>x.id===id);
-            if(it){ it.qty<=1 ? Cart.remove(id) : Cart.update(id, it.qty-1); }
-          }
-          if(act==='rem'){ Cart.remove(id); }
-        });
-      }
+      // Delegación Carrito (sheet)
+      const cartList=$('cart-list');
+      if(cartList){ cartList.addEventListener('click', function(e){ const t=e.target.closest('[data-action]'); if(!t) return; const act=t.getAttribute('data-action'); const id=t.getAttribute('data-id'); if(act==='inc') Cart.add(id); if(act==='dec'){ const items=Cart.get(); const it=items.find(x=>x.id===id); if(it){ it.qty<=1? Cart.remove(id) : Cart.update(id, it.qty-1); } } if(act==='rem') Cart.remove(id); }); }
 
-      // Botón flotante con promo pre-cargada
-      const float = $('floatWA');
-      if(float){
-        const promoText = (BUSINESS.promoTitle? BUSINESS.promoTitle+': ' : '') + (BUSINESS.promoMessage || '');
-        float.href = 'https://wa.me/' + BUSINESS.phone.replace(/[^0-9]/g,'') + '?text=' + encodeURIComponent(promoText);
-      }
+      // Botones WhatsApp
+      ['btnHeroWA','btnContactWA','btnCheckout','btnCheckoutForm','btnFooterWA','dockWA'].forEach(i=>{ const el=$(i); if(el) el.addEventListener('click', checkoutWhatsApp); });
 
-      // Cerrar con ESC
-      document.addEventListener('keydown', (e)=>{ if(e.key==='Escape') window.closeCart(); });
+      // Acciones de Sheet
+      $('btnOpenCart') && $('btnOpenCart').addEventListener('click', openCart);
+      $('btnCloseCart') && $('btnCloseCart').addEventListener('click', closeCart);
+      $('sheet-backdrop') && $('sheet-backdrop').addEventListener('click', closeCart);
+      $('btnClearCart') && $('btnClearCart').addEventListener('click', function(){ Cart.clear(); });
 
-      // Drawer UI + año footer
-      const panel = $('cart-panel');
-      const bd = $('cart-backdrop');
-      function updateDrawerUI(){
-        const open = document.documentElement.classList.contains('cart-open');
-        panel.style.transform = open ? 'translateX(0)' : 'translateX(100%)';
-        bd.style.opacity = open ? '1' : '0';
-        bd.style.pointerEvents = open ? 'auto' : 'none';
-      }
-      updateDrawerUI();
-      new MutationObserver(updateDrawerUI).observe(document.documentElement,{ attributes:true, attributeFilter:['class'] });
-      const y = $('y'); if(y) y.textContent = new Date().getFullYear();
+      // Dock móvil
+      $('dockCart') && $('dockCart').addEventListener('click', openCart);
+      $('dockCatalog') && $('dockCatalog').addEventListener('click', function(){ document.getElementById('catalogSec').scrollIntoView({behavior:'smooth'}); });
 
-      if(window.TEST_MODE === true){ runTests(); }
+      // Estado visual del Sheet
+      const sheet=$('cart-sheet'); const bd=$('sheet-backdrop');
+      function updateSheet(){ const open=document.documentElement.classList.contains('cart-open'); sheet.style.transform = open? 'translateY(0)' : 'translateY(100%)'; bd.style.opacity=open? '1':'0'; bd.style.pointerEvents=open? 'auto':'none'; }
+      updateSheet(); new MutationObserver(updateSheet).observe(document.documentElement,{attributes:true, attributeFilter:['class']});
+
+      // Año footer y promo en flotante
+      const y=$('y'); if(y) y.textContent=new Date().getFullYear();
+      const float=$('floatWA'); if(float){ const promo=(BUSINESS.promoTitle? BUSINESS.promoTitle+': ' : '')+(BUSINESS.promoMessage||''); float.href='https://wa.me/'+BUSINESS.phone.replace(/[^0-9]/g,'')+'?text='+encodeURIComponent(promo); }
+
+      // ESC
+      document.addEventListener('keydown', function(e){ if(e.key==='Escape') closeCart(); });
     });
 
-    // ===== Tests =====
-    window.TEST_MODE = false; // true para probar en consola
-    function runTests(){
-      console.group('Pruebas SeguriCam');
-      // Limpio
-      Cart.clear();
-      // 1) buildWhatsAppText básico
-      let t1 = buildWhatsAppText();
-      console.assert(typeof t1 === 'string' && t1.length>0, 'buildWhatsAppText retorna string');
-      // 2) Cart + cantidades
-      Cart.add('cam-mini-360');
-      let t2 = buildWhatsAppText();
-      console.assert(t2.includes('Pedido:'), 'Incluye encabezado Pedido');
-      Cart.update('cam-mini-360', 2);
-      let t3 = buildWhatsAppText();
-      console.assert(t3.includes('x2'), 'Refleja cantidad 2');
-      // 3) open/closeCart muta clase
-      window.openCart();
-      console.assert(document.documentElement.classList.contains('cart-open'), 'openCart agrega cart-open');
-      window.closeCart();
-      console.assert(!document.documentElement.classList.contains('cart-open'), 'closeCart quita cart-open');
-      // 4) Delivery según promo
-      const prev = BUSINESS.deliveryIncludedPromo; BUSINESS.deliveryIncludedPromo = false;
-      Cart.add('timbre-smart');
-      let t4 = buildWhatsAppText();
-      console.assert(/Delivery: S\//.test(t4), 'Muestra delivery cuando promo off');
-      BUSINESS.deliveryIncludedPromo = prev; Cart.clear();
-      // 5) Operaciones de carrito (inc/dec/rem)
-      Cart.clear();
-      Cart.add('kit-dvr-4');
-      console.assert(Cart.get().find(x=>x.id==='kit-dvr-4').qty===1,'Add 1 kit');
-      Cart.add('kit-dvr-4');
-      console.assert(Cart.get().find(x=>x.id==='kit-dvr-4').qty===2,'Inc to 2');
-      Cart.update('kit-dvr-4',1);
-      console.assert(Cart.get().find(x=>x.id==='kit-dvr-4').qty===1,'Dec to 1');
-      Cart.remove('kit-dvr-4');
-      console.assert(!Cart.get().some(x=>x.id==='kit-dvr-4'),'Removed item');
-      console.groupEnd();
+    // ============ PRODUCT MODAL ============
+    function openProduct(id){
+      const p=PRODUCTS.find(x=>x.id===id); if(!p) return; const m=$('product-modal');
+      qs('[data-p-img]',m).src=p.image; qs('[data-p-title]',m).textContent=p.title; qs('[data-p-badge]',m).textContent=p.badge||''; qs('[data-p-price]',m).textContent=PEN.format(p.price); qs('[data-p-compare]',m).textContent=p.compareAt? PEN.format(p.compareAt):''; qs('[data-p-short]',m).textContent=p.short; qs('[data-p-details]',m).textContent=p.details;
+      const add=$('btnAddDetail'); if(add){ add.onclick=function(){ Cart.add(p.id); openCart(); m.close(); } }
+      if(m && m.showModal) m.showModal();
     }
   </script>
 </head>
-<body class="bg-gray-50 text-gray-900 overflow-x-hidden">
-  <!-- Top Bar -->
-  <div class="bg-[var(--brand)] text-white text-sm">
-    <div class="max-w-6xl mx-auto px-4 safe-container py-2 flex items-center justify-between">
-      <p>📦 Envíos en Lima y todo el Perú</p>
-      <div class="flex items-center gap-4">
-        <span id="deliveryPromoFlag" class="font-semibold">🎁 Delivery incluido por promo</span>
-        <a href="#faq" class="underline/60 hover:underline">¿Dudas? FAQ</a>
-      </div>
-    </div>
-  </div>
-
+<body>
   <!-- Header -->
-  <header class="bg-white/90 sticky top-0 z-40 border-b">
-    <div class="max-w-6xl mx-auto px-4 safe-container py-3 flex flex-wrap items-center gap-3 sm:gap-4">
-      <a href="#" class="flex items-center gap-2 font-extrabold text-xl"><span class="inline-block w-7 h-7 rounded-full bg-[var(--brand)]"></span> Vigilante</a>
-      <nav class="hidden sm:flex items-center gap-6 text-sm ml-6">
-        <a href="#catalogSec" class="hover:text-[var(--brand)]">Productos</a>
-        <a href="#como-funciona" class="hover:text-[var(--brand)]">¿Cómo funciona?</a>
-        <a href="#faq" class="hover:text-[var(--brand)]">FAQ</a>
-        <a href="#contacto" class="hover:text-[var(--brand)]">Contacto</a>
+  <header class="sticky top-0 z-40 border-b border-white/10 backdrop-blur bg-black/30">
+    <div class="max-w-6xl mx-auto px-4 py-3 flex items-center gap-4">
+      <a id="logo" href="#" class="flex items-center gap-2 font-extrabold text-xl text-white">
+        <span class="inline-block w-7 h-7 rounded-full" style="background:linear-gradient(45deg,var(--accent),var(--accent2))"></span>
+        web - prueba 2
+      </a>
+      <nav class="hidden md:flex items-center gap-6 text-sm ml-6 text-slate-300">
+        <a href="#catalogSec" class="hover:text-white">Productos</a>
+        <a href="#como" class="hover:text-white">¿Cómo funciona?</a>
+        <a href="#faq" class="hover:text-white">FAQ</a>
+        <a href="#contacto" class="hover:text-white">Contacto</a>
       </nav>
       <div class="ml-auto flex items-center gap-2">
         <div class="relative hidden sm:block">
-          <input id="search" type="search" placeholder="Buscar..." class="border rounded-xl py-2 pl-10 pr-3 w-64 focus:outline-none focus:ring-2 focus:ring-[var(--brand)]">
-          <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">🔍</span>
+          <input id="search" type="search" placeholder="Buscar..." class="bg-transparent border border-white/10 rounded-xl py-2 pl-10 pr-3 w-64 outline-none focus:ring-2 focus:ring-[var(--accent)] text-white placeholder:text-slate-400">
+          <span class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">🔍</span>
         </div>
-        <select id="sort" class="hidden sm:block border rounded-xl py-2 px-3 text-sm">
+        <select id="sort" class="bg-transparent border border-white/10 rounded-xl py-2 px-3 text-sm text-slate-200">
           <option value="">Ordenar</option>
           <option value="price-asc">Precio: menor a mayor</option>
           <option value="price-desc">Precio: mayor a menor</option>
           <option value="rating">Mejor calificación</option>
         </select>
-        <button id="btnOpenCart" class="relative inline-flex items-center gap-2 ml-2 rounded-xl border px-3 py-2 hover:bg-gray-100">
-          🛒 <span class="hidden sm:inline">Carrito</span>
-        </button>
+        <button id="btnOpenCart" class="relative inline-flex items-center gap-2 ml-2 rounded-xl border border-white/10 px-3 py-2 hover:bg-white/10" aria-label="Abrir carrito">🛒<span class="hidden sm:inline">Carrito</span></button>
       </div>
     </div>
   </header>
 
-  <!-- Hero -->
-  <section class="relative overflow-hidden bg-gradient-to-b from-white to-gray-50">
-    <div class="max-w-6xl mx-auto px-4 safe-container py-14 grid md:grid-cols-2 gap-10 items-center">
+  <!-- Hero distinto (oscuro + neón) -->
+  <section class="relative">
+    <div class="max-w-6xl mx-auto px-4 py-16 md:py-20 grid md:grid-cols-2 gap-10 items-center">
       <div>
-        <h1 class="text-4xl md:text-5xl font-extrabold leading-tight">Protege tu hogar y negocio <span class="text-[var(--brand)]">24/7</span></h1>
-        <p class="mt-4 text-gray-700 text-lg">Cámaras Wi‑Fi, kits DVR y timbres inteligentes con instalación guiada y soporte. Facturamos con IGV.</p>
-        <p class="mt-2 text-sm text-gray-600 italic">Cámaras de seguridad — importamos cámaras de seguridad</p>
-        <div class="mt-6 flex flex-wrap gap-3">
-          <a href="#catalogSec" class="inline-flex items-center justify-center rounded-2xl bg-[var(--brand)] hover:bg-[var(--brandDark)] text-white px-5 py-3 font-semibold">Ver catálogo</a>
-          <button id="btnHeroWA" class="inline-flex items-center justify-center rounded-2xl border border-[var(--brand)] text-[var(--brand)] hover:bg-teal-50 px-5 py-3 font-semibold">Cotizar por WhatsApp</button>
+        <h1 class="text-4xl md:text-6xl font-extrabold leading-tight text-white">
+          Cámaras de seguridad <span style="background:linear-gradient(90deg,var(--accent),var(--accent2));-webkit-background-clip:text;background-clip:text;color:transparent">para Lima</span>
+        </h1>
+        <p class="mt-5 text-slate-300 text-lg">Instalación guiada y soporte por WhatsApp. Entrega rápida en Lima. Paga con Yape/Plin o tarjeta.</p>
+        <div class="mt-7 flex flex-wrap gap-3">
+          <button id="btnHeroWA" class="inline-flex items-center justify-center rounded-2xl btn-pri px-5 py-3 font-semibold">Cotizar por WhatsApp</button>
+          <a href="#catalogSec" class="inline-flex items-center justify-center rounded-2xl btn-sec px-5 py-3 font-semibold">Ver catálogo</a>
         </div>
-        <ul class="mt-6 grid grid-cols-2 gap-3 text-sm text-gray-700">
-          <li>✅ Garantía 6 a 12 meses</li>
-          <li>✅ Soporte por WhatsApp</li>
-          <li>✅ Envíos el mismo día (Lima)</li>
-          <li>✅ Pagos: Yape, Plin, Transferencia</li>
+        <ul class="mt-6 grid grid-cols-2 gap-3 text-sm text-slate-300">
+          <li>✓ Garantía 6–12 meses</li>
+          <li>✓ Soporte por WhatsApp</li>
+          <li>✓ Entrega en 24h Lima</li>
+          <li>✓ Precios con IGV</li>
         </ul>
       </div>
       <div class="relative">
-        <div class="rounded-3xl overflow-hidden shadow-xl ring-1 ring-black/5">
-          <img src="https://images.unsplash.com/photo-1585218332977-fd65fdbfb4b4?q=80&w=1200&auto=format&fit=crop" alt="Cámaras de seguridad" class="w-full h-[360px] object-cover"/>
+        <div class="rounded-3xl overflow-hidden shadow-2xl ring-1 ring-white/10">
+          <img src="https://images.unsplash.com/photo-1585218332977-fd65fdbfb4b4?q=80&w=1200&auto=format&fit=crop" alt="Cámaras de seguridad" class="w-full h-[380px] object-cover"/>
         </div>
-        <div class="absolute -bottom-6 -left-6 glass rounded-2xl shadow p-4 hidden md:flex gap-4 items-center">
-          <div class="text-3xl">🔒</div>
+        <div class="absolute -bottom-6 -left-6 glass rounded-2xl shadow p-4 hidden md:flex gap-4 items-center border border-white/10">
+          <div class="text-3xl">🔭</div>
           <div>
-            <div class="font-semibold">Monitoreo en tu celular</div>
-            <div class="text-sm text-gray-600">Recibe alertas y habla desde la app</div>
+            <div class="font-semibold text-white">Monitoreo desde tu celular</div>
+            <div class="text-sm text-slate-300">Alertas y audio 2 vías</div>
           </div>
         </div>
       </div>
     </div>
   </section>
 
+  <!-- Chips + filtros -->
+  <section class="max-w-6xl mx-auto px-4">
+    <div id="chips" class="flex gap-2 overflow-x-auto pb-2">
+      <button class="chip active px-3 py-2 rounded-full text-sm" data-type="all">Todos</button>
+      <button class="chip px-3 py-2 rounded-full text-sm" data-type="wifi">Wi‑Fi</button>
+      <button class="chip px-3 py-2 rounded-full text-sm" data-type="kit">Kits DVR/NVR</button>
+      <button class="chip px-3 py-2 rounded-full text-sm" data-type="timbre">Timbres</button>
+      <button class="chip px-3 py-2 rounded-full text-sm" data-type="exterior">Exterior</button>
+    </div>
+  </section>
+
   <!-- Catálogo -->
-  <section id="catalogSec" class="max-w-6xl mx-auto px-4 safe-container py-12">
+  <section id="catalogSec" class="max-w-6xl mx-auto px-4 py-10">
     <div class="flex items-end justify-between mb-6">
       <div>
-        <h2 class="text-2xl md:text-3xl font-bold">Catálogo</h2>
-        <p class="text-gray-600">Elige tu opción ideal. Los precios mostrarán IGV en el resumen.</p>
+        <h2 class="text-2xl md:text-3xl font-bold text-white">Catálogo</h2>
+        <p class="text-slate-400">IGV (18%) se desglosa en el carrito.</p>
       </div>
-      <a href="#faq" class="text-sm text-[var(--brand)] hover:underline">¿Cuál me conviene?</a>
+      <a href="#faq" class="text-sm" style="color:var(--accent)">¿Cuál me conviene?</a>
     </div>
     <div id="catalog" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
   </section>
 
   <!-- Cómo funciona -->
-  <section id="como-funciona" class="bg-white border-t">
-    <div class="max-w-6xl mx-auto px-4 safe-container py-12 grid md:grid-cols-4 gap-6">
-      <div class="p-6 rounded-2xl border bg-gray-50"><div class="text-3xl">🛒</div><h3 class="font-bold mt-2">1. Elige</h3><p class="text-sm text-gray-600">Añade productos al carrito y cotiza en un clic.</p></div>
-      <div class="p-6 rounded-2xl border bg-gray-50"><div class="text-3xl">💬</div><h3 class="font-bold mt-2">2. Confirma</h3><p class="text-sm text-gray-600">Coordinamos por WhatsApp entrega e instalación.</p></div>
-      <div class="p-6 rounded-2xl border bg-gray-50"><div class="text-3xl">🚚</div><h3 class="font-bold mt-2">3. Recibe</h3><p class="text-sm text-gray-600">Delivery en Lima o envío nacional.</p></div>
-      <div class="p-6 rounded-2xl border bg-gray-50"><div class="text-3xl">📱</div><h3 class="font-bold mt-2">4. Monitorea</h3><p class="text-sm text-gray-600">Instala la app y mira en tiempo real.</p></div>
+  <section id="como" class="border-t border-white/10 bg-black/20">
+    <div class="max-w-6xl mx-auto px-4 py-12 grid md:grid-cols-4 gap-6">
+      <div class="p-6 rounded-2xl card"><div class="text-3xl">🛒</div><h3 class="font-bold mt-2 text-white">1. Elige</h3><p class="text-sm text-slate-300">Añade productos al carrito o cotiza directo.</p></div>
+      <div class="p-6 rounded-2xl card"><div class="text-3xl">💬</div><h3 class="font-bold mt-2 text-white">2. Confirma</h3><p class="text-sm text-slate-300">Coordinamos por WhatsApp entrega e instalación.</p></div>
+      <div class="p-6 rounded-2xl card"><div class="text-3xl">🚚</div><h3 class="font-bold mt-2 text-white">3. Recibe</h3><p class="text-sm text-slate-300">Delivery en Lima o envío nacional.</p></div>
+      <div class="p-6 rounded-2xl card"><div class="text-3xl">📱</div><h3 class="font-bold mt-2 text-white">4. Monitorea</h3><p class="text-sm text-slate-300">App móvil con alertas en tiempo real.</p></div>
     </div>
   </section>
 
   <!-- FAQ -->
-  <section id="faq" class="max-w-6xl mx-auto px-4 safe-container py-12">
-    <h2 class="text-2xl md:text-3xl font-bold mb-6">Preguntas frecuentes</h2>
+  <section id="faq" class="max-w-6xl mx-auto px-4 py-12">
+    <h2 class="text-2xl md:text-3xl font-bold text-white mb-6">Preguntas frecuentes</h2>
     <div class="grid md:grid-cols-2 gap-6">
-      <details class="p-5 bg-white rounded-2xl border" open>
-        <summary class="font-semibold cursor-pointer">¿Incluye instalación?</summary>
-        <p class="mt-3 text-sm text-gray-700">Guía por WhatsApp sin costo y visitas técnicas a pedido (costo adicional en Lima). Para kits DVR recomendamos técnico.</p>
+      <details class="p-5 rounded-2xl card" open>
+        <summary class="font-semibold cursor-pointer text-white">¿Incluye instalación?</summary>
+        <p class="mt-3 text-sm text-slate-300">Guía por WhatsApp sin costo y visitas técnicas a pedido (costo adicional en Lima). Para kits DVR recomendamos técnico.</p>
       </details>
-      <details class="p-5 bg-white rounded-2xl border">
-        <summary class="font-semibold cursor-pointer">¿Necesito internet?</summary>
-        <p class="mt-3 text-sm text-gray-700">Las cámaras Wi‑Fi requieren red 2.4 GHz. Los kits DVR pueden verse por internet si conectas el DVR al router.</p>
+      <details class="p-5 rounded-2xl card">
+        <summary class="font-semibold cursor-pointer text-white">¿Necesito internet?</summary>
+        <p class="mt-3 text-sm text-slate-300">Las cámaras Wi‑Fi requieren red 2.4 GHz. Los kits DVR pueden verse por internet si conectas el DVR al router.</p>
       </details>
-      <details class="p-5 bg-white rounded-2xl border">
-        <summary class="font-semibold cursor-pointer">¿Métodos de pago?</summary>
-        <p class="mt-3 text-sm text-gray-700">Yape, Plin y transferencia bancaria. Consultar por contraentrega en Lima.</p>
+      <details class="p-5 rounded-2xl card">
+        <summary class="font-semibold cursor-pointer text-white">¿Métodos de pago?</summary>
+        <p class="mt-3 text-sm text-slate-300">Yape, Plin y transferencia bancaria. Consultar por contraentrega en Lima.</p>
       </details>
-      <details class="p-5 bg-white rounded-2xl border">
-        <summary class="font-semibold cursor-pointer">¿Garantía?</summary>
-        <p class="mt-3 text-sm text-gray-700">Garantía por defectos de fábrica de 6 a 12 meses.</p>
+      <details class="p-5 rounded-2xl card">
+        <summary class="font-semibold cursor-pointer text-white">¿Garantía?</summary>
+        <p class="mt-3 text-sm text-slate-300">Garantía por defectos de fábrica de 6 a 12 meses.</p>
       </details>
     </div>
   </section>
 
   <!-- Contacto -->
-  <section id="contacto" class="bg-white border-t">
-    <div class="max-w-6xl mx-auto px-4 safe-container py-12 grid md:grid-cols-2 gap-8 items-center">
+  <section id="contacto" class="border-t border-white/10 bg-black/20">
+    <div class="max-w-6xl mx-auto px-4 py-12 grid md:grid-cols-2 gap-8 items-center">
       <div>
-        <h2 class="text-2xl md:text-3xl font-bold">¿Necesitas asesoría?</h2>
-        <p class="text-gray-700 mt-2">Cuéntanos tu caso: hogar, departamento, tienda o almacén. Te recomendamos el equipo ideal.</p>
+        <h2 class="text-2xl md:text-3xl font-bold text-white">¿Necesitas asesoría?</h2>
+        <p class="text-slate-300 mt-2">Cuéntanos tu caso: hogar, departamento, tienda o almacén. Te recomendamos el equipo ideal.</p>
         <div class="mt-4 flex gap-3">
-          <button id="btnContactWA" class="inline-flex items-center justify-center rounded-2xl bg-[#25D366] hover:brightness-95 text-white px-5 py-3 font-semibold">Escribir por WhatsApp</button>
-          <a href="#catalogSec" class="inline-flex items-center justify-center rounded-2xl border px-5 py-3 font-semibold">Ver catálogo</a>
+          <button id="btnContactWA" class="inline-flex items-center justify-center rounded-2xl btn-pri px-5 py-3 font-semibold">Escribir por WhatsApp</button>
+          <a href="#catalogSec" class="inline-flex items-center justify-center rounded-2xl btn-sec px-5 py-3 font-semibold">Ver catálogo</a>
         </div>
       </div>
-      <form onsubmit="event.preventDefault();" class="bg-gray-50 p-6 rounded-2xl border">
+      <form onsubmit="return false;" class="p-6 rounded-2xl card">
         <div class="grid sm:grid-cols-2 gap-4">
           <div>
-            <label class="text-sm text-gray-600">Nombre</label>
-            <input id="fName" name="name" required class="w-full mt-1 border rounded-xl px-3 py-2" placeholder="Tu nombre" />
+            <label class="text-sm text-slate-300">Nombre</label>
+            <input id="fName" class="w-full mt-1 bg-transparent border border-white/10 rounded-xl px-3 py-2 text-white placeholder:text-slate-500" placeholder="Tu nombre" />
           </div>
           <div>
-            <label class="text-sm text-gray-600">Distrito</label>
-            <input id="fDistrict" name="district" class="w-full mt-1 border rounded-xl px-3 py-2" placeholder="Ej. Miraflores" />
+            <label class="text-sm text-slate-300">Distrito</label>
+            <input id="fDistrict" class="w-full mt-1 bg-transparent border border-white/10 rounded-xl px-3 py-2 text-white placeholder:text-slate-500" placeholder="Ej. Miraflores" />
           </div>
           <div class="sm:col-span-2">
-            <label class="text-sm text-gray-600">Mensaje</label>
-            <textarea id="fMsg" name="message" class="w-full mt-1 border rounded-xl px-3 py-2" rows="3" placeholder="Cuéntanos qué necesitas asegurar..."></textarea>
+            <label class="text-sm text-slate-300">Mensaje</label>
+            <textarea id="fMsg" rows="3" class="w-full mt-1 bg-transparent border border-white/10 rounded-xl px-3 py-2 text-white placeholder:text-slate-500" placeholder="Cuéntanos qué necesitas asegurar..."></textarea>
           </div>
         </div>
-        <button id="btnCheckoutForm" class="mt-4 w-full rounded-2xl bg-[var(--brand)] hover:bg-[var(--brandDark)] text-white py-3 font-semibold" type="button">Enviar por WhatsApp</button>
+        <button id="btnCheckoutForm" class="mt-4 w-full rounded-2xl btn-pri py-3 font-semibold" type="button">Enviar por WhatsApp</button>
       </form>
     </div>
   </section>
 
   <!-- Footer -->
-  <footer class="bg-gray-900 text-gray-200">
-    <div class="max-w-6xl mx-auto px-4 safe-container py-10 grid md:grid-cols-4 gap-8">
+  <footer class="border-t border-white/10">
+    <div class="max-w-6xl mx-auto px-4 py-10 grid md:grid-cols-4 gap-8">
       <div>
-        <div class="font-extrabold text-xl">Vigilante</div>
-        <p class="text-sm text-gray-400 mt-2">Protegemos lo que más importa. Lima, Perú.</p>
+        <div class="font-extrabold text-xl text-white">web - prueba 2</div>
+        <p class="text-sm text-slate-400 mt-2">Protegemos lo que más importa. Lima, Perú.</p>
       </div>
       <div>
-        <div class="font-semibold">Ayuda</div>
-        <ul class="mt-2 space-y-1 text-sm text-gray-400">
+        <div class="font-semibold text-white">Ayuda</div>
+        <ul class="mt-2 space-y-1 text-sm text-slate-400">
           <li><a href="#faq" class="hover:text-white">FAQ</a></li>
           <li><a href="#contacto" class="hover:text-white">Contacto</a></li>
-          <li><a href="#como-funciona" class="hover:text-white">Cómo comprar</a></li>
+          <li><a href="#como" class="hover:text-white">Cómo comprar</a></li>
         </ul>
       </div>
       <div>
-        <div class="font-semibold">Legal</div>
-        <ul class="mt-2 space-y-1 text-sm text-gray-400">
+        <div class="font-semibold text-white">Legal</div>
+        <ul class="mt-2 space-y-1 text-sm text-slate-400">
           <li>Precios en PEN (S/)</li>
           <li>Incluye IGV al pagar</li>
           <li>Garantía por fabricante</li>
         </ul>
       </div>
       <div>
-        <div class="font-semibold">WhatsApp</div>
-        <p class="text-sm text-gray-400 mt-2">+51 954 118 198</p>
-        <button id="btnFooterWA" class="mt-3 inline-flex items-center rounded-xl bg-[#25D366] text-white px-4 py-2 font-semibold">Chatear ahora</button>
+        <div class="font-semibold text-white">WhatsApp</div>
+        <p class="text-sm text-slate-400 mt-2">+51 954 118 198</p>
+        <button id="btnFooterWA" class="mt-3 inline-flex items-center rounded-xl btn-pri text-black px-4 py-2 font-semibold">Chatear ahora</button>
       </div>
     </div>
     <div class="border-t border-white/10">
-      <div class="max-w-6xl mx-auto px-4 safe-container py-4 text-xs text-gray-400">© <span id="y"></span> Vigilante — Hecho con TailwindCSS</div>
+      <div class="max-w-6xl mx-auto px-4 py-4 text-xs text-slate-400">© <span id="y"></span> web - prueba 2</div>
     </div>
   </footer>
 
-  <!-- Carrito Drawer -->
-  <div class="fixed inset-0 z-50 pointer-events-none" aria-hidden="true">
-    <div id="cart-backdrop" class="absolute inset-0 bg-black/40 opacity-0 transition-opacity duration-300 pointer-events-none"></div>
-    <aside id="cart-panel" class="absolute right-0 top-0 h-full w-full max-w-md bg-white shadow-2xl translate-x-full transition-transform duration-300 pointer-events-auto">
-      <div class="p-4 border-b flex items-center justify-between">
-        <h3 class="text-lg font-semibold">Tu carrito</h3>
-        <button id="btnCloseCart" class="text-gray-500 hover:text-black" type="button">✕</button>
+  <!-- Sticky dock (móvil) -->
+  <nav class="fixed bottom-0 left-0 right-0 z-40 md:hidden safe-bottom">
+    <div class="mx-auto max-w-6xl px-3 pb-2">
+      <div class="glass rounded-2xl border border-white/10 grid grid-cols-3 overflow-hidden">
+        <button id="dockCatalog" class="py-3 text-sm text-slate-200 hover:text-white">📦 Catálogo</button>
+        <button id="dockWA" class="py-3 text-sm font-semibold" style="color:black; background:linear-gradient(90deg,var(--accent),var(--accent2))">WhatsApp</button>
+        <button id="dockCart" class="py-3 text-sm text-slate-200 hover:text-white">🛒 Carrito</button>
       </div>
-      <div id="cart-list" class="p-4 overflow-y-auto max-h-[60vh]"></div>
-      <div class="p-4 border-t space-y-2">
-        <div class="flex justify-between text-sm"><span>Subtotal</span><span data-subtotal></span></div>
-        <div class="flex justify-between text-sm"><span>IGV (18%)</span><span data-igv></span></div>
-        <div class="flex justify-between text-sm"><span>Delivery</span><span data-delivery></span></div>
-        <div class="flex justify-between font-semibold text-lg pt-2"><span>Total</span><span data-total></span></div>
-        <button id="btnCheckout" class="w-full mt-2 rounded-xl bg-[var(--brand)] hover:bg-[var(--brandDark)] text-white py-3 font-semibold" type="button">Finalizar por WhatsApp</button>
-        <button id="btnClearCart" class="w-full mt-2 rounded-xl border py-3 font-semibold" type="button">Vaciar carrito</button>
+    </div>
+  </nav>
+
+  <!-- Carrito hoja inferior (sheet) -->
+  <div id="sheet-backdrop" class="fixed inset-0 bg-black/50 opacity-0 pointer-events-none transition-opacity duration-300 z-40"></div>
+  <aside id="cart-sheet" class="fixed bottom-0 left-0 right-0 z-50 translate-y-full transition-transform duration-300">
+    <div class="mx-auto max-w-2xl px-3 safe-bottom">
+      <div class="glass rounded-t-2xl border border-white/10">
+        <div class="p-4 border-b border-white/10 flex items-center justify-between">
+          <h3 class="text-lg font-semibold text-white">Tu carrito</h3>
+          <button id="btnCloseCart" class="text-slate-300 hover:text-white" type="button">✕</button>
+        </div>
+        <div id="cart-list" class="p-4 overflow-y-auto max-h-[50vh]"></div>
+        <div class="p-4 border-t border-white/10 space-y-2">
+          <div class="flex justify-between text-sm text-slate-300"><span>Subtotal</span><span data-subtotal></span></div>
+          <div class="flex justify-between text-sm text-slate-300"><span>IGV (18%)</span><span data-igv></span></div>
+          <div class="flex justify-between text-sm text-slate-300"><span>Delivery</span><span data-delivery></span></div>
+          <div class="flex justify-between font-semibold text-lg text-white pt-2"><span>Total</span><span data-total></span></div>
+          <div class="grid grid-cols-2 gap-2 pt-2">
+            <button id="btnCheckout" class="rounded-xl btn-pri py-3 font-semibold" type="button">Finalizar por WhatsApp</button>
+            <button id="btnClearCart" class="rounded-xl btn-sec py-3 font-semibold" type="button">Vaciar</button>
+          </div>
+        </div>
       </div>
-    </aside>
-  </div>
+    </div>
+  </aside>
 
   <!-- Producto Modal -->
   <dialog id="product-modal" class="rounded-2xl p-0 w-full max-w-2xl backdrop:bg-black/40">
-    <div class="grid md:grid-cols-2">
+    <div class="grid md:grid-cols-2 card">
       <img data-p-img src="" alt="Producto" class="w-full h-64 md:h-full object-cover"/>
       <div class="p-6 space-y-2">
-        <div class="text-xs text-[var(--brand)] font-bold" data-p-badge></div>
-        <h3 class="text-2xl font-bold" data-p-title></h3>
+        <div class="text-xs font-bold" style="color:var(--accent)" data-p-badge></div>
+        <h3 class="text-2xl font-bold text-white" data-p-title></h3>
         <div class="flex items-center gap-3">
-          <div class="text-2xl font-extrabold" data-p-price></div>
-          <div class="text-sm line-through text-gray-400" data-p-compare></div>
+          <div class="text-2xl font-extrabold price" data-p-price></div>
+          <div class="text-sm line-through text-slate-400" data-p-compare></div>
         </div>
-        <p class="text-gray-700" data-p-short></p>
-        <p class="text-sm text-gray-600" data-p-details></p>
+        <p class="text-slate-300" data-p-short></p>
+        <p class="text-sm text-slate-400" data-p-details></p>
         <div class="pt-4 flex gap-3">
-          <button id="btnAddDetail" class="flex-1 rounded-xl bg-[var(--brand)] hover:bg-[var(--brandDark)] text-white py-3 font-semibold" type="button">Añadir al carrito</button>
-          <form method="dialog"><button class="px-4 rounded-xl border font-semibold" type="submit">Cerrar</button></form>
+          <button id="btnAddDetail" class="flex-1 rounded-xl btn-pri text-black py-3 font-semibold" type="button">Añadir al carrito</button>
+          <form method="dialog"><button class="px-4 rounded-xl btn-sec font-semibold" type="submit">Cerrar</button></form>
         </div>
       </div>
     </div>
   </dialog>
 
-  <!-- Botón flotante WhatsApp (safe-area aware) -->
-  <a id="floatWA" target="_blank" class="fixed bottom-5 right-5 z-40 safe-fab inline-flex items-center gap-2 rounded-full shadow-lg px-4 py-3 bg-[#25D366] text-white font-semibold hover:brightness-95">WhatsApp 💬</a>
+  <!-- Botón flotante WhatsApp (desktop) -->
+  <a id="floatWA" target="_blank" class="hidden md:inline-flex fixed bottom-6 right-6 z-40 items-center gap-2 rounded-full shadow-lg px-4 py-3 btn-pri font-semibold">WhatsApp 💬</a>
 
+  <!-- Error overlay -->
+  <div id="errOverlay" style="position:fixed;left:0;right:0;bottom:0;background:#fee2e2;color:#991b1b;padding:8px 12px;font:12px/1.4 system-ui,-apple-system,Segoe UI,Roboto,Helvetica;display:none;z-index:9999"></div>
   <script>
-    // Overlay de errores (debug rápido en prod)
-    (function(){
-      const el = document.createElement('div');
-      el.id = 'errOverlay';
-      el.style.cssText = 'position:fixed;left:0;right:0;bottom:0;background:#fee2e2;color:#991b1b;padding:8px 12px;font:12px/1.4 system-ui,-apple-system,Segoe UI,Roboto,Helvetica;display:none;z-index:9999';
-      document.body.appendChild(el);
-      window.addEventListener('error', (e)=>{
-        el.style.display='block';
-        el.textContent = 'Error: ' + (e.message || 'unknown') + (e.filename? ' — ' + e.filename : '') + (e.lineno? ' @'+e.lineno+':'+e.colno : '');
-        console.error(e.error || e.message);
-      });
-    })();
+    window.addEventListener('error', function(e){ var box=document.getElementById('errOverlay'); if(!box) return; box.style.display='block'; box.textContent='Error: '+(e.message||'unknown')+(e.filename? ' — '+e.filename:'')+(e.lineno? ' @'+e.lineno+':'+e.colno:''); console.error(e.error||e.message); });
   </script>
 </body>
 </html>
